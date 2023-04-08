@@ -41,7 +41,6 @@ export default class MimbleWimbleCoin {
     CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE: 0x13,
     FINISH_TRANSACTION: 0x14,
     GET_MQS_TIMESTAMP_SIGNATURE: 0x15,
-    GET_TOR_CERTIFICATE_SIGNATURE: 0x16,
   };
   private static readonly Status = {
     UNKNOWN_CLASS: 0xb100,
