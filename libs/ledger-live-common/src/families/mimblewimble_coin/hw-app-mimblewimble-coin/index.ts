@@ -862,7 +862,7 @@ export default class MimbleWimbleCoin {
     const tag = Common.subarray(
       finishEncryptingSlateResponse,
       0,
-      finishEncryptingSlateResponse.length - MimbleWimbleCoin.STATUS_LENGTH
+      Crypto.CHACHA20_POLY1305_TAG_LENGTH
     );
     const temp = Buffer.alloc(encryptedSlatepackData.length + tag.length);
     encryptedSlatepackData.copy(temp, 0);
