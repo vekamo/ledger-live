@@ -1872,7 +1872,7 @@ export default class Slate {
               slate.relativeHeight
             ),
           ];
-        } else {
+        } else if (Common.isPureObject(serializedSlate)) {
           if (
             !("sta" in serializedSlate) ||
             serializedSlate.sta !== Slate.getPurposeAsText(purpose)
@@ -2225,6 +2225,10 @@ export default class Slate {
               slate.relativeHeight
             ),
           ];
+        } else {
+          throw new MimbleWimbleCoinInvalidParameters(
+            "Invalid serialized slate"
+          );
         }
         break;
       default:

@@ -489,7 +489,7 @@ export default class SlateParticipant {
           } else {
             slateParticipant.partialSignature = null;
           }
-        } else {
+        } else if (Common.isPureObject(serializedSlateParticipant)) {
           if (
             !("xs" in serializedSlateParticipant) ||
             !Common.isHexString(serializedSlateParticipant.xs) ||
@@ -572,6 +572,11 @@ export default class SlateParticipant {
           } else {
             slateParticipant.partialSignature = null;
           }
+        }
+        else {
+          throw new MimbleWimbleCoinInvalidParameters(
+            "Invalid serialized slate participant"
+          );
         }
         break;
       default:

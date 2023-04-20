@@ -156,7 +156,7 @@ export default class SlateInput {
             );
           }
           slateInput.commitment = commitment;
-        } else {
+        } else if (Common.isPureObject(serializedSlateInput)) {
           if (
             "f" in serializedSlateInput &&
             (!Common.isBigNumber(serializedSlateInput.f) ||
@@ -187,6 +187,10 @@ export default class SlateInput {
             );
           }
           slateInput.commitment = Buffer.from(serializedSlateInput.c, "hex");
+        } else {
+          throw new MimbleWimbleCoinInvalidParameters(
+            "Invalid serialized slate input"
+          );
         }
         break;
       default:

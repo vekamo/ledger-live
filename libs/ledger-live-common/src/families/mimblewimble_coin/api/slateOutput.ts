@@ -221,7 +221,7 @@ export default class SlateOutput {
             );
           }
           slateOutput.proof = bitReader.getBytes(proofLength.toNumber());
-        } else {
+        } else if (Common.isPureObject(serializedSlateOutput)) {
           if (
             "f" in serializedSlateOutput &&
             (!Common.isBigNumber(serializedSlateOutput.f) ||
@@ -260,6 +260,11 @@ export default class SlateOutput {
             );
           }
           slateOutput.proof = Buffer.from(serializedSlateOutput.p, "hex");
+        }
+        else {
+          throw new MimbleWimbleCoinInvalidParameters(
+            "Invalid serialized slate output"
+          );
         }
         break;
       default:
