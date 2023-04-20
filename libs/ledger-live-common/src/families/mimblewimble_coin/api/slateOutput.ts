@@ -260,8 +260,7 @@ export default class SlateOutput {
             );
           }
           slateOutput.proof = Buffer.from(serializedSlateOutput.p, "hex");
-        }
-        else {
+        } else {
           throw new MimbleWimbleCoinInvalidParameters(
             "Invalid serialized slate output"
           );

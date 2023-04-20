@@ -572,8 +572,7 @@ export default class SlateParticipant {
           } else {
             slateParticipant.partialSignature = null;
           }
-        }
-        else {
+        } else {
           throw new MimbleWimbleCoinInvalidParameters(
             "Invalid serialized slate participant"
           );

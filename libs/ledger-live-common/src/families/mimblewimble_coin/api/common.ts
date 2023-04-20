@@ -102,4 +102,17 @@ export default class Common {
       (!Common.isPureObject(value) && BigNumber.isBigNumber(value))
     );
   }
+
+  public static arraysAreEqualTimingSafe(
+    arrayOne: Buffer,
+    arrayTwo: Buffer
+  ): boolean {
+    let result: number = arrayOne.length === arrayTwo.length ? 0 : 1;
+    for (let i = 0; i < arrayOne.length; ++i) {
+      const arrayOneValue = arrayOne[i];
+      const arrayTwoValue = i < arrayTwo.length ? arrayTwo[i] : 0;
+      result |= arrayOneValue === arrayTwoValue ? 0 : 1;
+    }
+    return result === 0;
+  }
 }

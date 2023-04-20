@@ -83,7 +83,12 @@ export default class Age {
         continue;
       }
       ephemeralX25519SecretKey.fill(0);
-      if (sharedSecret.equals(Buffer.alloc(Crypto.X25519_PRIVATE_KEY_LENGTH))) {
+      if (
+        Common.arraysAreEqualTimingSafe(
+          sharedSecret,
+          Buffer.alloc(Crypto.X25519_PRIVATE_KEY_LENGTH)
+        )
+      ) {
         continue;
       }
       break;
