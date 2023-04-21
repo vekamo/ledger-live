@@ -58,7 +58,7 @@ const selectStyles: StylesConfig<Option> = {
   }),
 };
 
-type Option = typeof options[0];
+type Option = (typeof options)[0];
 export const Split = (args: Props): React.ReactNode => {
   const [leftValue1, setLeftValue1] = React.useState<Option | null>(null);
   const [rightValue1, setRightValue1] = React.useState<string>("");

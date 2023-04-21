@@ -11,6 +11,7 @@ import {
   prepareTransaction,
 } from "../js-transaction";
 import { makeAccountBridgeReceive } from "../../../bridge/jsHelpers";
+import { assignFromAccountRaw, assignToAccountRaw } from "../serialization";
 
 const getPreloadStrategy = (): any => {};
 
@@ -37,6 +38,8 @@ const accountBridge: AccountBridge<Transaction> = {
   receive,
   signOperation,
   broadcast,
+  assignFromAccountRaw,
+  assignToAccountRaw,
 };
 
 export default {

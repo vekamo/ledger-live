@@ -18,7 +18,7 @@ yarn upgrade-interactive -i --latest
 | @cosmjs/ledger-amino                        | Osmosis coin integration                                          | TBD, planning to remove soon                                         |
 | @cosmjs/proto-signing                       | Cosmos coin integration                                           | monthly                                                              |
 | @cosmjs/stargate                            | Cosmos coin integration                                           | monthly                                                              |
-| @crypto-com/chain-jslib                     | Crypto.com coin integration                                       | monthly                                                              |
+| @crypto-org-chain/chain-jslib               | Cronos coin integration                                           | monthly                                                              |
 | @keplr-wallet/cosmos                        | Osmosis coin integration                                          | TBD, planning to remove                                              |
 | @ethereumjs/common                          | Ethereum coin integration                                         | monthly                                                              |
 | @ethereumjs/tx                              | Ethereum coin integration                                         | monthly                                                              |
@@ -93,7 +93,7 @@ yarn upgrade-interactive -i --latest
 | hi-base32                                   | MimbleWimble Coin coin integration                                | monthly
 | invariant                                   | generic helper                                                    | monthly                                                              |
 | isomorphic-ws                               | WebSocket helper                                                  | monthly                                                              |
-| json-bignumber                              | MimbleWimble Coin coin integration                                | monthly                                                              |
+| json-bignumber                              | MimbleWimble Coin coin integration                                | monthly  
 | json-rpc-2.0                                | Ethereum coin integration                                         | monthly                                                              |
 | leb128                                      | Filecoin coin integration                                         | monthly                                                              |
 | lodash                                      | generic helper                                                    | monthly                                                              |

@@ -10,6 +10,8 @@ import type {
   AppStatePayload,
   AppStateSetHasConnectedDevicePayload,
   AppStateSetModalLockPayload,
+  AppStateSetWiredDevicePayload,
+  AppStateUpdateMainNavigatorVisibilityPayload,
   DangerouslyOverrideStatePayload,
 } from "../actions/types";
 import { AppStateActionTypes } from "../actions/types";
@@ -24,6 +26,8 @@ export const INITIAL_STATE: AppState = {
   modalLock: false,
   backgroundEvents: [],
   debugMenuVisible: false,
+  isMainNavigatorVisible: true,
+  wiredDevice: null,
 };
 
 const handlers: ReducerMap<AppState, AppStatePayload> = {
@@ -34,20 +38,23 @@ const handlers: ReducerMap<AppState, AppStatePayload> = {
 
   [AppStateActionTypes.SYNC_IS_CONNECTED]: (state, action) => ({
     ...state,
-    isConnected: (action as Action<AppStateIsConnectedPayload>).payload
-      .isConnected,
+    isConnected: (action as Action<AppStateIsConnectedPayload>).payload,
   }),
 
   [AppStateActionTypes.HAS_CONNECTED_DEVICE]: (state, action) => ({
     ...state,
     hasConnectedDevice: (action as Action<AppStateSetHasConnectedDevicePayload>)
-      .payload.hasConnectedDevice,
+      .payload,
   }),
 
   [AppStateActionTypes.SET_MODAL_LOCK]: (state, action) => ({
     ...state,
-    modalLock: (action as Action<AppStateSetModalLockPayload>).payload
-      .modalLock,
+    modalLock: (action as Action<AppStateSetModalLockPayload>).payload,
+  }),
+
+  [AppStateActionTypes.SET_WIRED_DEVICE]: (state, action) => ({
+    ...state,
+    wiredDevice: (action as Action<AppStateSetWiredDevicePayload>).payload,
   }),
 
   [AppStateActionTypes.QUEUE_BACKGROUND_EVENT]: (state, action) => ({
@@ -78,6 +85,13 @@ const handlers: ReducerMap<AppState, AppStatePayload> = {
     ...state,
     ...(action as Action<DangerouslyOverrideStatePayload>).payload.appstate,
   }),
+
+  [AppStateActionTypes.UPDATE_MAIN_NAVIGATOR_VISIBILITY]: (state, action) => ({
+    ...state,
+    isMainNavigatorVisible: (
+      action as Action<AppStateUpdateMainNavigatorVisibilityPayload>
+    ).payload,
+  }),
 };
 
 // Selectors
@@ -86,6 +100,8 @@ export const isDebugMenuVisible = (state: State) =>
   state.appstate.debugMenuVisible;
 export const isConnectedSelector = (state: State) => state.appstate.isConnected;
 export const isModalLockedSelector = (state: State) => state.appstate.modalLock;
+export const getWiredDeviceSelector = (state: State) =>
+  state.appstate.wiredDevice;
 export const hasConnectedDeviceSelector = (state: State) =>
   state.appstate.hasConnectedDevice;
 
@@ -94,6 +110,9 @@ export const backgroundEventsSelector = (state: State) =>
 
 export const nextBackgroundEventSelector = (state: State) =>
   state.appstate.backgroundEvents[0];
+
+export const isMainNavigatorVisibleSelector = (state: State) =>
+  state.appstate.isMainNavigatorVisible;
 
 const globalNetworkDown = new NetworkDown();
 

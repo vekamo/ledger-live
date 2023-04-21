@@ -5,7 +5,7 @@ import {
   formatTransactionStatusCommon,
   fromTransactionStatusRawCommon,
   toTransactionStatusRawCommon,
-} from "../../transaction/common";
+} from "@ledgerhq/coin-framework/transaction/common";
 import type { Account } from "@ledgerhq/types-live";
 import { getAccountUnit } from "../../account";
 import { formatCurrencyUnit } from "../../currencies";

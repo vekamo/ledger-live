@@ -27,6 +27,7 @@ import {
   NotificationContentCard,
 } from "../dynamicContent/types";
 import { ProtectStateNumberEnum } from "../components/ServicesWidget/types";
+import { ImageType } from "../components/CustomImage/types";
 
 // === ACCOUNT STATE ===
 
@@ -71,6 +72,8 @@ export type AppState = {
   hasConnectedDevice: boolean;
   modalLock: boolean;
   backgroundEvents: Array<FwUpdateBackgroundEvent>;
+  isMainNavigatorVisible: boolean;
+  wiredDevice: DeviceLike | null;
 };
 
 // === BLE STATE ===
@@ -163,8 +166,6 @@ export type Pair = {
   exchange?: string | null;
 };
 
-// export type SetExchangePairs = (_: Array<Pair>) => any;
-
 export type Theme = "system" | "light" | "dark";
 
 export type SettingsState = {
@@ -185,13 +186,13 @@ export type SettingsState = {
   countervalueFirst: boolean;
   graphCountervalueFirst: boolean;
   hideEmptyTokenAccounts: boolean;
+  filterTokenOperationsZeroAmount: boolean;
   blacklistedTokenIds: string[];
   hiddenNftCollections: string[];
   dismissedBanners: string[];
   hasAvailableUpdate: boolean;
   theme: Theme;
   osTheme: string | null | undefined;
-  carouselVisibility: number | Record<string, boolean>;
   dismissedDynamicCards: string[];
   // number is the legacy type from LLM V2
   discreetMode: boolean;
@@ -207,6 +208,8 @@ export type SettingsState = {
     };
   };
   lastSeenDevice: DeviceModelInfo | null | undefined;
+  knownDeviceModelIds: Record<DeviceModelId, boolean>;
+  hasSeenStaxEnabledNftsPopup: boolean;
   starredMarketCoins: string[];
   lastConnectedDevice: Device | null | undefined;
   marketRequestParams: MarketListRequestParams;
@@ -215,6 +218,7 @@ export type SettingsState = {
   sensitiveAnalytics: boolean;
   firstConnectionHasDevice: boolean | null;
   firstConnectHasDeviceUpdated: boolean | null;
+  customImageType: ImageType | null;
   customImageBackup?: { hex: string; hash: string };
   lastSeenCustomImage: {
     size: number;
@@ -225,6 +229,10 @@ export type SettingsState = {
   displayStatusCenter: boolean;
   overriddenFeatureFlags: { [key in FeatureId]?: Feature | undefined };
   featureFlagsBannerVisible: boolean;
+  debugAppLevelDrawerOpened: boolean;
+  dateFormat: string;
+  hasBeenUpsoldProtect: boolean;
+  generalTermsVersionAccepted?: string;
 };
 
 export type NotificationsSettings = {

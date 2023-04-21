@@ -35,7 +35,7 @@ import { RootStackParamList } from "../../components/RootNavigator/types/RootNav
 import Animation from "../../components/Animation";
 import { getDeviceAnimation } from "../../helpers/getDeviceAnimation";
 import SkipLock from "../../components/behaviour/SkipLock";
-import BottomModal from "../../components/BottomModal";
+import QueuedDrawer from "../../components/QueuedDrawer";
 
 const DeviceActionContainer = styled(Flex).attrs({
   flexDirection: "row",
@@ -355,12 +355,15 @@ function AddAccountsAccounts(props: Props) {
           </>
         }
       />
-      <BottomModal isOpened={rootPublicKeyRequested} noCloseButton={true}>
+      <QueuedDrawer
+        isRequestingToBeOpened={rootPublicKeyRequested}
+        noCloseButton={true}
+      >
         <ApproveExportRootPublicKeyOnDevice
           device={device}
           accountIndex={accountIndex}
         />
-      </BottomModal>
+      </QueuedDrawer>
     </>
   );
 }

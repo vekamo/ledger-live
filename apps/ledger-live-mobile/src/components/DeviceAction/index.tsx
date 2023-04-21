@@ -62,6 +62,7 @@ import PreventNativeBack from "../PreventNativeBack";
 import SkipLock from "../behaviour/SkipLock";
 import DeviceActionProgress from "../DeviceActionProgress";
 import { PartialNullable } from "../../types/helpers";
+import ModalLock from "../ModalLock";
 
 type LedgerError = InstanceType<
   LedgerErrorConstructor<{ [key: string]: unknown }>
@@ -223,7 +224,7 @@ export function DeviceActionDefaultRendering<R, H extends Status, P>({
   } = status;
 
   useEffect(() => {
-    if (deviceInfo) {
+    if (deviceInfo && device) {
       dispatch(
         setLastSeenDeviceInfo({
           modelId: device!.modelId,
@@ -280,6 +281,7 @@ export function DeviceActionDefaultRendering<R, H extends Status, P>({
         <Flex mt={5}>
           <Text variant="h4">{t("deviceLocalization.installingLanguage")}</Text>
         </Flex>
+        <ModalLock />
       </Flex>
     );
   }
@@ -452,7 +454,7 @@ export function DeviceActionDefaultRendering<R, H extends Status, P>({
         onRetry,
         colors,
         theme,
-        iconColor: palette.neutral.c100a01,
+        iconColor: palette.opacityDefault.c10,
         Icon: () => (
           <Icons.WarningSolidMedium size={28} color={colors.warning} />
         ),

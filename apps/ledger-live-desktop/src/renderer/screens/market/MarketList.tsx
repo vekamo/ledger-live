@@ -2,7 +2,8 @@ import React, { useCallback, memo, useMemo } from "react";
 import { useMarketData } from "@ledgerhq/live-common/market/MarketDataProvider";
 import styled from "styled-components";
 import { Flex, Text, Icon } from "@ledgerhq/react-ui";
-import { Trans, useTranslation } from "react-i18next";
+import { Currency } from "@ledgerhq/types-cryptoassets";
+import { TFunction, Trans, useTranslation } from "react-i18next";
 import { FixedSizeList as List } from "react-window";
 import InfiniteLoader from "react-window-infinite-loader";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -18,6 +19,7 @@ import { useRampCatalog } from "@ledgerhq/live-common/platform/providers/RampCat
 import { getAllSupportedCryptoCurrencyTickers } from "@ledgerhq/live-common/platform/providers/RampCatalogProvider/helpers";
 import Image from "~/renderer/components/Image";
 import NoResultsFound from "~/renderer/images/no-results-found.png";
+import { useFeature } from "@ledgerhq/live-common/featureFlags/index";
 
 export const TableCellBase = styled(Flex).attrs({
   alignItems: "center",
@@ -34,7 +36,7 @@ export const TableCell = ({
 }: {
   disabled?: boolean;
   loading?: boolean;
-  onClick?: (e: any) => void;
+  onClick?: (e: Event) => void;
   children?: React.ReactNode;
 }) => (
   <TableCellBase {...props}>
@@ -166,7 +168,21 @@ export const TableRow = styled(Flex).attrs({
   }
 `;
 
-const NoCryptoPlaceholder = ({ requestParams, t, resetSearch }: any) => (
+const NoCryptoPlaceholder = ({
+  requestParams,
+  t,
+  resetSearch,
+}: {
+  requestParams: {
+    orderBy: string;
+    order: string;
+    starred: boolean;
+    search: string;
+    range: string;
+  };
+  t: TFunction;
+  resetSearch: () => void;
+}) => (
   <Flex
     mt={7}
     mx={"auto"}
@@ -213,12 +229,31 @@ const CurrencyRow = memo(function CurrencyRowItem({
   onRampAvailableTickers,
   range,
   style,
-}: any) {
+}: {
+  data: Currency[];
+  index: number;
+  counterCurrency: Currency;
+  loading: boolean;
+  toggleStar: (id: string) => void;
+  selectCurrency: (currency: Currency) => void;
+  starredMarketCoins: string[];
+  locale: string;
+  swapAvailableIds: string[];
+  onRampAvailableTickers: string[];
+  range: string;
+  style: React.CSSProperties;
+}) {
   const currency = data ? data[index] : null;
   const internalCurrency = currency ? currency.internalCurrency : null;
   const isStarred = currency && starredMarketCoins.includes(currency.id);
   const availableOnBuy = currency && onRampAvailableTickers.includes(currency.ticker.toUpperCase());
   const availableOnSwap = internalCurrency && swapAvailableIds.includes(internalCurrency.id);
+  const stakeProgramsFeatureFlag = useFeature("stakePrograms");
+  const listFlag = stakeProgramsFeatureFlag?.params?.list ?? [];
+  const stakeProgramsEnabled = stakeProgramsFeatureFlag?.enabled ?? false;
+  const availableOnStake =
+    stakeProgramsEnabled && listFlag.includes(currency?.internalCurrency?.id || "");
+
   return (
     <MarketRowItem
       loading={!currency || (index === data.length && index > 50 && loading)}
@@ -231,6 +266,7 @@ const CurrencyRow = memo(function CurrencyRowItem({
       selectCurrency={selectCurrency}
       availableOnBuy={availableOnBuy}
       availableOnSwap={availableOnSwap}
+      availableOnStake={availableOnStake}
       range={range}
       style={{ ...style }}
     />
@@ -249,20 +285,19 @@ function MarketList({
   const { providers, storedProviders } = useProviders();
   const rampCatalog = useRampCatalog();
 
-  const [onRampAvailableTickers, offRampAvailableTickers] = useMemo(() => {
+  const onRampAvailableTickers = useMemo(() => {
     if (!rampCatalog.value) {
-      return [[], []];
+      return [];
     }
-    return [
-      getAllSupportedCryptoCurrencyTickers(rampCatalog.value.onRamp),
-      getAllSupportedCryptoCurrencyTickers(rampCatalog.value.offRamp),
-    ];
+    return getAllSupportedCryptoCurrencyTickers(rampCatalog.value.onRamp);
   }, [rampCatalog.value]);
 
   const swapAvailableIds =
     providers || storedProviders
       ? (providers || storedProviders)
-          .map(({ pairs }: any) => pairs.map(({ from, to }: any) => [from, to]))
+          .map(<T,>({ pairs }: { params: Array<{ from: T; to: T }> }) =>
+            pairs.map(({ from, to }: { from: T; to: T }) => [from, to]),
+          )
           .flat(2)
       : [];
 
@@ -380,7 +415,13 @@ function MarketList({
                     itemCount={itemCount}
                     loadMoreItems={loadNextPage}
                   >
-                    {({ onItemsRendered, ref }: any) => (
+                    {({
+                      onItemsRendered,
+                      ref,
+                    }: {
+                      onItemsRendered: (_: unknown) => void;
+                      ref: React.RefObject<List>;
+                    }) => (
                       <List
                         height={height}
                         width="100%"

@@ -12,7 +12,7 @@ import StyledStatusBar from "../../../components/StyledStatusBar";
 import Illustration, {
   Props as IllustrationProps,
 } from "../../../images/illustration/Illustration";
-import { setHasOrderedNano } from "../../../actions/settings";
+import { setHasOrderedNano, setReadOnlyMode } from "../../../actions/settings";
 import DeviceSetupView from "../../../components/DeviceSetupView";
 import { OnboardingNavigatorParamList } from "../../../components/RootNavigator/types/OnboardingNavigator";
 import {
@@ -115,8 +115,9 @@ function PostWelcomeSelection({ route }: NavigationProps) {
   const { t } = useTranslation();
 
   const setupLedger = useCallback(() => {
+    dispatch(setReadOnlyMode(false));
     navigation.navigate(ScreenName.OnboardingDeviceSelection);
-  }, [navigation]);
+  }, [dispatch, navigation]);
 
   const buyLedger = useCallback(() => {
     (
@@ -147,8 +148,13 @@ function PostWelcomeSelection({ route }: NavigationProps) {
     [staxWelcomeScreenEnabled],
   );
 
+  const handleBack = useCallback(() => {
+    dispatch(setReadOnlyMode(true));
+    navigation.goBack();
+  }, [dispatch, navigation]);
+
   return (
-    <DeviceSetupView hasBackButton>
+    <DeviceSetupView hasBackButton onBack={handleBack}>
       <ScrollListContainer flex={1} mx={6}>
         <TrackScreen
           category="Onboarding"

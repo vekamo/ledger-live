@@ -24,13 +24,12 @@ import {
   counterValueCurrencySelector,
   hasOrderedNanoSelector,
 } from "../../../reducers/settings";
-import { usePortfolio } from "../../../hooks/portfolio";
+import { usePortfolioAllAccounts } from "../../../hooks/portfolio";
 
 import GraphCardContainer from "../GraphCardContainer";
 import TrackScreen from "../../../analytics/TrackScreen";
 import { NavigatorName, ScreenName } from "../../../const";
 import { useProviders } from "../../Swap/Form/index";
-import MigrateAccountsBanner from "../../MigrateAccounts/Banner";
 import CheckLanguageAvailability from "../../../components/CheckLanguageAvailability";
 import CheckTermOfUseUpdate from "../../../components/CheckTermOfUseUpdate";
 import { TAB_BAR_SAFE_HEIGHT } from "../../../components/TabBar/TabBarSafeAreaView";
@@ -59,7 +58,7 @@ function ReadOnlyPortfolio({ navigation }: NavigationProps) {
   const counterValueCurrency: Currency = useSelector(
     counterValueCurrencySelector,
   );
-  const portfolio = usePortfolio();
+  const portfolio = usePortfolioAllAccounts();
   const { colors } = useTheme();
   const hasOrderedNano = useSelector(hasOrderedNanoSelector);
   useProviders();
@@ -196,7 +195,6 @@ function ReadOnlyPortfolio({ navigation }: NavigationProps) {
         keyExtractor={(_: unknown, index: number) => String(index)}
         showsVerticalScrollIndicator={false}
       />
-      <MigrateAccountsBanner />
     </>
   );
 }

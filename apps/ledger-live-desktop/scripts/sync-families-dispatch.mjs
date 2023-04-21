@@ -6,51 +6,43 @@ const basePath = path.join(__dirname, "..");
 const rendererPath = path.join(basePath, "src", "renderer");
 const generatedPath = path.join(rendererPath, "generated");
 
-await new Promise((resolve, reject) => {
-  rimraf(generatedPath, e => {
-    if (e) {
-      echo(chalk.red(e));
-      return reject(e);
-    }
-    return resolve(fs.promises.mkdir(generatedPath));
-  });
-});
+await rimraf(generatedPath);
+await fs.promises.mkdir(generatedPath);
 
 const families = await fs.readdir(path.join(rendererPath, "families"));
 const targets = [
-  "operationDetails.jsx",
-  "accountActions.jsx",
-  "TransactionConfirmFields.jsx",
-  "AccountBodyHeader.js",
-  "AccountSubHeader.jsx",
-  "SendAmountFields.jsx",
-  "SendRecipientFields.jsx",
-  "SendWarning.jsx",
-  "ReceiveWarning.jsx",
-  "AccountBalanceSummaryFooter.jsx",
-  "TokenList.jsx",
-  "AccountHeaderManageActions.js",
-  "StepReceiveFunds.jsx",
-  "NoAssociatedAccounts.jsx",
-  "ReceiveStepConnectDevice.jsx",
-  "StepImport.jsx",
-  "SendStepConnectDevice.jsx",
+  "operationDetails.tsx",
+  "accountActions.tsx",
+  "TransactionConfirmFields.tsx",
+  "AccountBodyHeader.ts",
+  "AccountSubHeader.tsx",
+  "SendAmountFields.tsx",
+  "SendRecipientFields.tsx",
+  "SendWarning.tsx",
+  "ReceiveWarning.tsx",
+  "AccountBalanceSummaryFooter.tsx",
+  "TokenList.tsx",
+  "AccountHeaderManageActions.ts",
+  "StepReceiveFunds.tsx",
+  "NoAssociatedAccounts.tsx",
+  "ReceiveStepConnectDevice.tsx",
+  "StepImport.tsx",
+  "SendStepConnectDevice.tsx",
+  "live-common-setup.ts",
+  "modals.ts",
+  "StakeBanner.tsx",
 ];
 
 async function genTarget(target) {
-  let imports = `// @flow`;
+  let imports = ``;
   let exprts = `export default {`;
   const outpath = path.join(generatedPath, target);
   const [targetName, extension] = target.split(".");
 
   for (const family of families) {
     try {
-      if (["jsx", "tsx"].includes(extension)) {
+      if (["tsx"].includes(extension)) {
         await Promise.any([
-          fs.promises.access(
-            path.join(rendererPath, "families", family, `${targetName}.jsx`),
-            fs.constants.R_OK,
-          ),
           fs.promises.access(
             path.join(rendererPath, "families", family, `${targetName}.tsx`),
             fs.constants.R_OK,

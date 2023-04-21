@@ -14,7 +14,7 @@ import { NavigatorName, ScreenName } from "../../../const";
 
 import AppIcon from "../AppsList/AppIcon";
 
-import BottomModal from "../../../components/BottomModal";
+import QueuedDrawer from "../../../components/QueuedDrawer";
 import type {
   BaseComposite,
   StackNavigatorProps,
@@ -64,11 +64,6 @@ const InstallSuccessBar = ({ state, navigation, disable }: Props) => {
     setHasBeenShown(true);
   }, [navigation]);
 
-  const onSupportLink = useCallback(() => {
-    Linking.openURL(urls.appSupport);
-    setHasBeenShown(true);
-  }, []);
-
   const successInstalls = useMemo(
     () =>
       !hasBeenShown && installQueue.length <= 0 && uninstallQueue.length <= 0
@@ -98,10 +93,18 @@ const InstallSuccessBar = ({ state, navigation, disable }: Props) => {
     [successInstalls],
   );
 
+  const onSupportLink = useCallback(() => {
+    Linking.openURL(app?.supportURL || urls.appSupport);
+    setHasBeenShown(true);
+  }, [app]);
+
   const onClose = useCallback(() => setHasBeenShown(true), []);
 
   return (
-    <BottomModal isOpened={successInstalls.length >= 1} onClose={onClose}>
+    <QueuedDrawer
+      isRequestingToBeOpened={successInstalls.length >= 1}
+      onClose={onClose}
+    >
       <Flex alignItems="center">
         {app && <AppIcon app={app} size={48} radius={14} />}
         <TextContainer>
@@ -131,7 +134,7 @@ const InstallSuccessBar = ({ state, navigation, disable }: Props) => {
           )}
         </ButtonsContainer>
       </Flex>
-    </BottomModal>
+    </QueuedDrawer>
   );
 };
 

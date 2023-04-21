@@ -9,6 +9,7 @@ import { DeviceModelId } from "@ledgerhq/types-devices";
 import { PostOnboardingActionId } from "@ledgerhq/types-live";
 import {
   completeCustomImageFlow,
+  setCustomImageType,
   setLastConnectedDevice,
   setReadOnlyMode,
 } from "../../actions/settings";
@@ -50,7 +51,12 @@ type NavigationProps = BaseComposite<
  */
 const Step3Transfer = ({ route, navigation }: NavigationProps) => {
   const dispatch = useDispatch();
-  const { rawData, device: deviceFromRoute, previewData } = route.params;
+  const {
+    rawData,
+    device: deviceFromRoute,
+    previewData,
+    imageType,
+  } = route.params;
 
   const [device, setDevice] = useState<Device | null>(deviceFromRoute);
   const lastConnectedDevice = useSelector(lastConnectedDeviceSelector);
@@ -96,8 +102,9 @@ const Step3Transfer = ({ route, navigation }: NavigationProps) => {
   const handleResult = useCallback(() => {
     completeAction(PostOnboardingActionId.customImage);
     dispatch(completeCustomImageFlow());
+    dispatch(setCustomImageType(imageType));
     handleExit();
-  }, [completeAction, dispatch, handleExit]);
+  }, [completeAction, dispatch, handleExit, imageType]);
 
   const insets = useSafeAreaInsets();
   const DEBUG = false;
@@ -119,7 +126,9 @@ const Step3Transfer = ({ route, navigation }: NavigationProps) => {
             onSkip={handleExit}
           />
         ) : newDeviceSelectionFeatureFlag?.enabled ? (
-          <SelectDevice2 onSelect={setDevice} stopBleScanning={!!device} />
+          <Flex flex={1} alignSelf="stretch">
+            <SelectDevice2 onSelect={setDevice} stopBleScanning={!!device} />
+          </Flex>
         ) : (
           <Flex flex={1} alignSelf="stretch">
             <SelectDevice

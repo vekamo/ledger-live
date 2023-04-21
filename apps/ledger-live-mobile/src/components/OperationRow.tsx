@@ -13,6 +13,7 @@ import {
 import { Account, Operation, AccountLike } from "@ledgerhq/types-live";
 import { Box, Flex, InfiniteLoader, Text } from "@ledgerhq/native-ui";
 import debounce from "lodash/debounce";
+import { isEqual } from "lodash";
 import CurrencyUnitValue from "./CurrencyUnitValue";
 import CounterValue from "./CounterValue";
 import OperationIcon from "./OperationIcon";
@@ -25,7 +26,7 @@ import { UnionToIntersection } from "../types/helpers";
 import { BaseNavigation } from "./RootNavigator/types/helpers";
 
 type FamilyOperationDetailsIntersection = UnionToIntersection<
-  typeof perFamilyOperationDetails[keyof typeof perFamilyOperationDetails]
+  (typeof perFamilyOperationDetails)[keyof typeof perFamilyOperationDetails]
 >;
 
 const ContainerTouchable = styled(Flex).attrs(_ => ({
@@ -81,7 +82,7 @@ const placeholderProps = {
   containerHeight: 20,
 };
 
-export default function OperationRow({
+function OperationRow({
   account,
   parentAccount,
   operation,
@@ -143,7 +144,7 @@ export default function OperationRow({
   }, [account, operation, parentAccount]);
 
   const amount = getOperationAmountNumber(operation);
-  const valueColor = amount.isNegative() ? "neutral.c100" : "success.c100";
+  const valueColor = amount.isNegative() ? "neutral.c100" : "success.c50";
   const currency = getAccountCurrency(account);
   const unit = getAccountUnit(account);
 
@@ -252,3 +253,9 @@ export default function OperationRow({
     </ContainerTouchable>
   );
 }
+
+/**
+ * you might be surprised but isEqual on these objects is actually very fast
+ * (are we keeping the same object refs at a deep level? no lo se señor)
+ * */
+export default React.memo(OperationRow, isEqual);

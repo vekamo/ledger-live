@@ -18,11 +18,15 @@ import { snakeCase } from "lodash";
 import { useCallback } from "react";
 import { idsToLanguage } from "@ledgerhq/types-live";
 import {
+  hasNftInAccounts,
+  GENESIS_PASS_COLLECTION_CONTRACT,
+  INFINITY_PASS_COLLECTION_CONTRACT,
+} from "@ledgerhq/live-common/nft/helpers";
+import {
   getAndroidArchitecture,
   getAndroidVersionCode,
 } from "../logic/cleanBuildVersion";
 import getOrCreateUser from "../user";
-// eslint-disable-next-line import/no-cycle
 import {
   analyticsEnabledSelector,
   languageSelector,
@@ -34,6 +38,8 @@ import {
   readOnlyModeEnabledSelector,
   hasOrderedNanoSelector,
   notificationsSelector,
+  knownDeviceModelIdsSelector,
+  customImageTypeSelector,
 } from "../reducers/settings";
 import { knownDevicesSelector } from "../reducers/ble";
 import { DeviceLike, State } from "../reducers/types";
@@ -43,7 +49,9 @@ import type { AppStore } from "../reducers";
 import { NavigatorName } from "../const";
 import { previousRouteNameRef, currentRouteNameRef } from "./screenRefs";
 import { AnonymousIpPlugin } from "./AnonymousIpPlugin";
+import { UserIdPlugin } from "./UserIdPlugin";
 import { Maybe } from "../types/helpers";
+import { appStartupTime } from "../StartupTimeMarker";
 
 let sessionId = uuid();
 const appVersion = `${VersionNumber.appVersion || ""} (${
@@ -59,6 +67,8 @@ const extraProperties = async (store: AppStore) => {
   const systemLanguage = sensitiveAnalytics
     ? null
     : RNLocalize.getLocales()[0]?.languageTag;
+  const knownDeviceModelIds = knownDeviceModelIdsSelector(state);
+  const customImageType = customImageTypeSelector(state);
   const language = sensitiveAnalytics ? null : languageSelector(state);
   const region = sensitiveAnalytics ? null : localeSelector(state);
   const devices = knownDevicesSelector(state);
@@ -88,6 +98,15 @@ const extraProperties = async (store: AppStore) => {
   const firstConnectHasDeviceUpdated =
     firstConnectHasDeviceUpdatedSelector(state);
   const { user } = await getOrCreateUser();
+  const accountsWithFunds = accounts
+    ? [
+        ...new Set(
+          accounts
+            .filter(account => account?.balance.isGreaterThan(0))
+            .map(account => account?.currency?.ticker),
+        ),
+      ]
+    : [];
   const blockchainsWithNftsOwned = accounts
     ? [
         ...new Set(
@@ -97,6 +116,14 @@ const extraProperties = async (store: AppStore) => {
         ),
       ]
     : [];
+  const hasGenesisPass = hasNftInAccounts(
+    GENESIS_PASS_COLLECTION_CONTRACT,
+    accounts,
+  );
+  const hasInfinityPass = hasNftInAccounts(
+    INFINITY_PASS_COLLECTION_CONTRACT,
+    accounts,
+  );
 
   return {
     appVersion,
@@ -122,7 +149,13 @@ const extraProperties = async (store: AppStore) => {
     notificationsAllowed,
     notificationsBlacklisted,
     userId: user?.id,
+    accountsWithFunds,
     blockchainsWithNftsOwned,
+    hasGenesisPass,
+    hasInfinityPass,
+    appTimeToInteractiveMilliseconds: appStartupTime,
+    staxDeviceUser: knownDeviceModelIds.stax,
+    staxLockscreen: customImageType || "none",
   };
 };
 
@@ -151,14 +184,16 @@ export const start = async (
     });
     // This allows us to not retrieve users ip addresses for privacy reasons
     segmentClient.add({ plugin: new AnonymousIpPlugin() });
+    // This allows us to make sure we are adding the userId to the event
+    segmentClient.add({ plugin: new UserIdPlugin() });
 
     if (created) {
       segmentClient.reset();
     }
-    segmentClient.identify(user.id, userExtraProperties);
+    await segmentClient.identify(user.id, userExtraProperties);
   }
+  await track("Start", userExtraProperties, true);
 
-  track("Start", userExtraProperties, true);
   return segmentClient;
 };
 export const updateIdentify = async () => {
@@ -174,7 +209,10 @@ export const updateIdentify = async () => {
   const userExtraProperties = await extraProperties(storeInstance);
   if (ANALYTICS_LOGS) console.log("analytics:identify", userExtraProperties);
   if (!token) return;
-  segmentClient?.identify(userExtraProperties.userId, userExtraProperties);
+  await segmentClient?.identify(
+    userExtraProperties.userId,
+    userExtraProperties,
+  );
 };
 export const stop = () => {
   if (ANALYTICS_LOGS) console.log("analytics:stop");

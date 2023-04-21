@@ -41,7 +41,7 @@ export type SceneInfoProp = {
 };
 type InfoModalSceneKey = keyof typeof infoModalScenes;
 type InfoModalSceneValues = UnionToIntersection<
-  typeof infoModalScenes[InfoModalSceneKey]
+  (typeof infoModalScenes)[InfoModalSceneKey]
 >;
 
 type NavigationProps = StackNavigatorProps<

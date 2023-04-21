@@ -18,9 +18,6 @@ import { TrackScreen } from "../analytics";
 import type { SendFundsNavigatorStackParamList } from "../components/RootNavigator/types/SendFundsNavigator";
 import { ScreenName } from "../const";
 import type { StackNavigatorProps } from "../components/RootNavigator/types/helpers";
-import type { LendingEnableFlowParamsList } from "../components/RootNavigator/types/LendingEnableFlowNavigator";
-import type { LendingSupplyFlowNavigatorParamList } from "../components/RootNavigator/types/LendingSupplyFlowNavigator";
-import type { LendingWithdrawFlowNavigatorParamList } from "../components/RootNavigator/types/LendingWithdrawFlowNavigator";
 import type { ClaimRewardsNavigatorParamList } from "../components/RootNavigator/types/ClaimRewardsNavigator";
 import type { FreezeNavigatorParamList } from "../components/RootNavigator/types/FreezeNavigator";
 import type { UnfreezeNavigatorParamList } from "../components/RootNavigator/types/UnfreezeNavigator";
@@ -49,10 +46,6 @@ import type { ElrondWithdrawFlowParamList } from "../families/elrond/components/
 import type { NearStakingFlowParamList } from "../families/near/StakingFlow/types";
 import type { NearUnstakingFlowParamList } from "../families/near/UnstakingFlow/types";
 import type { NearWithdrawingFlowParamList } from "../families/near/WithdrawingFlow/types";
-import type { OsmosisDelegationFlowParamList } from "../families/osmosis/DelegationFlow/types";
-import type { OsmosisRedelegationFlowParamList } from "../families/osmosis/RedelegationFlow/types";
-import { OsmosisUndelegationFlowParamList } from "../families/osmosis/UndelegationFlow/types";
-import { OsmosisClaimRewardsFlowParamList } from "../families/osmosis/ClaimRewardsFlow/types";
 import { SolanaDelegationFlowParamList } from "../families/solana/DelegationFlow/types";
 import { StellarAddAssetFlowParamList } from "../families/stellar/AddAssetFlow/types";
 import { TezosDelegationFlowParamList } from "../families/tezos/DelegationFlow/types";
@@ -67,18 +60,6 @@ type Props =
   | StackNavigatorProps<
       SendFundsNavigatorStackParamList,
       ScreenName.SendConnectDevice
-    >
-  | StackNavigatorProps<
-      LendingEnableFlowParamsList,
-      ScreenName.LendingEnableConnectDevice
-    >
-  | StackNavigatorProps<
-      LendingSupplyFlowNavigatorParamList,
-      ScreenName.LendingSupplyConnectDevice
-    >
-  | StackNavigatorProps<
-      LendingWithdrawFlowNavigatorParamList,
-      ScreenName.LendingWithdrawConnectDevice
     >
   | StackNavigatorProps<
       ClaimRewardsNavigatorParamList,
@@ -187,22 +168,6 @@ type Props =
       ScreenName.NearWithdrawingConnectDevice
     >
   | StackNavigatorProps<
-      OsmosisDelegationFlowParamList,
-      ScreenName.OsmosisDelegationConnectDevice
-    >
-  | StackNavigatorProps<
-      OsmosisRedelegationFlowParamList,
-      ScreenName.OsmosisRedelegationConnectDevice
-    >
-  | StackNavigatorProps<
-      OsmosisUndelegationFlowParamList,
-      ScreenName.OsmosisUndelegationConnectDevice
-    >
-  | StackNavigatorProps<
-      OsmosisClaimRewardsFlowParamList,
-      ScreenName.OsmosisClaimRewardsConnectDevice
-    >
-  | StackNavigatorProps<
       SolanaDelegationFlowParamList,
       ScreenName.DelegationConnectDevice
     >
@@ -272,7 +237,6 @@ export default function ConnectDevice(props: Props) {
     : {
         renderOnResult: onResult,
       };
-
   const render = useMemo(
     () =>
       transaction ? (

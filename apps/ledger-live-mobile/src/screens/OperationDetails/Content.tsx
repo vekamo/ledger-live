@@ -16,6 +16,8 @@ import {
   getAccountCurrency,
   getAccountUnit,
   getAccountName,
+  getFeesCurrency,
+  getFeesUnit,
 } from "@ledgerhq/live-common/account/index";
 import {
   getOperationAmountNumber,
@@ -46,7 +48,7 @@ import DefaultOperationDetailsExtra from "./Extra";
 import Skeleton from "../../components/Skeleton";
 import type { State } from "../../reducers/types";
 import Title from "./Title";
-import FormatDate from "../../components/FormatDate";
+import FormatDate from "../../components/DateFormat/FormatDate";
 import type {
   RootNavigationComposite,
   StackNavigatorNavigation,
@@ -116,16 +118,16 @@ export default function Content({
   const currency = getAccountCurrency(account);
   const isToken = currency.type === "TokenCurrency";
   const unit = getAccountUnit(account);
-  const parentUnit = getAccountUnit(mainAccount);
-  const parentCurrency = getAccountCurrency(mainAccount);
+  const feeCurrency = getFeesCurrency(mainAccount);
+  const feeUnit = getFeesUnit(feeCurrency);
   const amount = getOperationAmountNumber(operation);
   const isNegative = amount.isNegative();
   const confirmationsString = getOperationConfirmationDisplayableNumber(
     operation,
     mainAccount,
   );
-  const uniqueSenders = uniq<typeof operation.senders[0]>(operation.senders);
-  const uniqueRecipients = uniq<typeof operation.recipients[0]>(
+  const uniqueSenders = uniq<(typeof operation.senders)[0]>(operation.senders);
+  const uniqueRecipients = uniq<(typeof operation.recipients)[0]>(
     operation.recipients,
   );
   const { extra, type } = operation;
@@ -144,11 +146,11 @@ export default function Content({
     ];
   const urlFeesInfo =
     specific &&
-    (specific as { getURLFeesInfo: (o: Operation) => string })
+    (specific as { getURLFeesInfo: (o: Operation, c: string) => string })
       ?.getURLFeesInfo &&
-    (specific as { getURLFeesInfo: (o: Operation) => string })?.getURLFeesInfo(
-      operation,
-    );
+    (
+      specific as { getURLFeesInfo: (o: Operation, c: string) => string }
+    )?.getURLFeesInfo(operation, mainAccount.currency.id);
   const Extra =
     specific &&
     (specific as { OperationDetailsExtra: React.ComponentType })
@@ -388,7 +390,7 @@ export default function Content({
               <LText style={sectionStyles.value} semiBold>
                 <CurrencyUnitValue
                   showCode
-                  unit={parentUnit}
+                  unit={feeUnit}
                   value={operation.fee}
                 />
               </LText>
@@ -401,7 +403,7 @@ export default function Content({
                   disableRounding={true}
                   date={operation.date}
                   subMagnitude={1}
-                  currency={parentCurrency}
+                  currency={feeCurrency}
                   value={operation.fee}
                 />
               </LText>

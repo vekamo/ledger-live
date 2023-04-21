@@ -7,10 +7,12 @@ import BleDevicePairing from "./BleDevicePairing";
 import { addKnownDevice } from "../../actions/ble";
 import type { BleDevicesScanningProps } from "./BleDevicesScanning";
 import type { BleDevicePairingProps } from "./BleDevicePairing";
+import { track } from "../../analytics";
 
 export type BleDevicePairingFlowProps = {
   filterByDeviceModelId?: BleDevicesScanningProps["filterByDeviceModelId"];
   areKnownDevicesDisplayed?: BleDevicesScanningProps["areKnownDevicesDisplayed"];
+  areKnownDevicesPairable?: BleDevicesScanningProps["areKnownDevicesPairable"];
   onGoBackFromScanning?: BleDevicesScanningProps["onGoBack"];
   onPairingSuccess: BleDevicePairingProps["onPaired"];
   onPairingSuccessAddToKnownDevices?: boolean;
@@ -33,6 +35,7 @@ type PairingFlowStep = "scanning" | "pairing" | "done";
 const BleDevicePairingFlow = ({
   filterByDeviceModelId,
   areKnownDevicesDisplayed = true,
+  areKnownDevicesPairable = false,
   onGoBackFromScanning,
   onPairingSuccess,
   onPairingSuccessAddToKnownDevices = false,
@@ -82,6 +85,7 @@ const BleDevicePairingFlow = ({
   );
 
   const onRetryPairingFlow = useCallback(() => {
+    track("button_clicked", { button: "Try BT pairing again" });
     setDeviceToPair(null);
     setPairingFlowStep("scanning");
   }, [setDeviceToPair, setPairingFlowStep]);
@@ -98,6 +102,7 @@ const BleDevicePairingFlow = ({
         <BleDevicesScanning
           filterByDeviceModelId={filterByDeviceModelId}
           areKnownDevicesDisplayed={areKnownDevicesDisplayed}
+          areKnownDevicesPairable={areKnownDevicesPairable}
           onDeviceSelect={onDeviceSelect}
           onGoBack={onGoBackFromScanning}
         />

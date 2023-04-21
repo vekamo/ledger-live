@@ -16,7 +16,7 @@ import {
   isAccountEmpty,
   groupAddAccounts,
 } from "@ledgerhq/live-common/account/index";
-import type { AddAccountSupportLink } from "@ledgerhq/live-common/account/addAccounts";
+import type { AddAccountSupportLink } from "@ledgerhq/live-common/account/index";
 import { createStructuredSelector } from "reselect";
 import uniq from "lodash/uniq";
 import { Trans, useTranslation } from "react-i18next";
@@ -24,7 +24,7 @@ import type { Account } from "@ledgerhq/types-live";
 import type { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyBridge } from "@ledgerhq/live-common/bridge/index";
 import { isTokenCurrency } from "@ledgerhq/live-common/currencies/index";
-import type { DerivationMode } from "@ledgerhq/live-common/derivation";
+import type { DerivationMode } from "@ledgerhq/coin-framework/derivation";
 import { useTheme } from "@react-navigation/native";
 import { Flex, Log } from "@ledgerhq/native-ui";
 import styled from "styled-components/native";
@@ -51,7 +51,7 @@ import GenericErrorBottomModal from "../../components/GenericErrorBottomModal";
 import NavigationScrollView from "../../components/NavigationScrollView";
 import { prepareCurrency } from "../../bridge/cache";
 import { blacklistedTokenIdsSelector } from "../../reducers/settings";
-import BottomModal from "../../components/BottomModal";
+import QueuedDrawer from "../../components/QueuedDrawer";
 import { urls } from "../../config/urls";
 import noAssociatedAccountsByFamily from "../../generated/NoAssociatedAccounts";
 import { State } from "../../reducers/types";
@@ -577,6 +577,7 @@ function AddAccountsAccounts(props: Props) {
       )}
       <GenericErrorBottomModal
         error={error}
+        onClose={onCancel}
         onModalHide={onModalHide}
         footerButtons={
           <>
@@ -588,12 +589,15 @@ function AddAccountsAccounts(props: Props) {
           </>
         }
       />
-      <BottomModal isOpened={rootPublicKeyRequested} noCloseButton={true}>
+      <QueuedDrawer
+        isRequestingToBeOpened={rootPublicKeyRequested}
+        noCloseButton={true}
+      >
         <ApproveExportRootPublicKeyOnDevice
           device={device}
           accountIndex={accountIndex}
         />
-      </BottomModal>
+      </QueuedDrawer>
     </SafeAreaView>
   );
 }
@@ -624,7 +628,11 @@ const AddressTypeTooltip = ({
         onPress={onOpen}
         IconRight={Info}
       />
-      <BottomModal isOpened={isOpen} onClose={onClose} style={styles.modal}>
+      <QueuedDrawer
+        isRequestingToBeOpened={isOpen}
+        onClose={onClose}
+        style={styles.modal}
+      >
         <View style={styles.modalContainer}>
           <LText style={styles.subtitle} color="grey">
             <Trans i18nKey="addAccounts.addressTypeInfo.subtitle" />
@@ -658,7 +666,7 @@ const AddressTypeTooltip = ({
             onPress={() => Linking.openURL(urls.bitcoinAddressType)}
           />
         ) : null}
-      </BottomModal>
+      </QueuedDrawer>
     </>
   );
 };

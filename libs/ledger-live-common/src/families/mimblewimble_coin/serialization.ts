@@ -1,10 +1,13 @@
 import type {
+  MimbleWimbleCoinAccount,
+  MimbleWimbleCoinAccountRaw,
   MimbleWimbleCoinResources,
   MimbleWimbleCoinResourcesRaw,
 } from "./types";
 import RecentHeight from "./api/recentHeight";
 import Identifier from "./api/identifier";
 import BigNumber from "bignumber.js";
+import { Account, AccountRaw } from "@ledgerhq/types-live";
 
 export const toMimbleWimbleCoinResourcesRaw = (
   mimbleWimbleCoinResources: MimbleWimbleCoinResources
@@ -58,3 +61,21 @@ export const fromMimbleWimbleCoinResourcesRaw = (
     nextTransactionSequenceNumber,
   };
 };
+
+export function assignToAccountRaw(account: Account, accountRaw: AccountRaw) {
+  const mimbleWimbleCoinAccount = account as MimbleWimbleCoinAccount;
+  if (mimbleWimbleCoinAccount.mimbleWimbleCoinResources)
+    (accountRaw as MimbleWimbleCoinAccountRaw).mimbleWimbleCoinResources =
+      toMimbleWimbleCoinResourcesRaw(
+        mimbleWimbleCoinAccount.mimbleWimbleCoinResources
+      );
+}
+
+export function assignFromAccountRaw(accountRaw: AccountRaw, account: Account) {
+  const mimbleWimbleCoinResourcesRaw = (
+    accountRaw as MimbleWimbleCoinAccountRaw
+  ).mimbleWimbleCoinResources;
+  if (mimbleWimbleCoinResourcesRaw)
+    (account as MimbleWimbleCoinAccount).mimbleWimbleCoinResources =
+      fromMimbleWimbleCoinResourcesRaw(mimbleWimbleCoinResourcesRaw);
+}

@@ -1,9 +1,10 @@
 import React, { useCallback } from "react";
 import { Linking } from "react-native";
-import { BottomDrawer, Button, Icons, Link } from "@ledgerhq/native-ui";
+import { Button, Icons, Link } from "@ledgerhq/native-ui";
 import { useTranslation } from "react-i18next";
 import { getProviderName } from "@ledgerhq/live-common/exchange/swap/utils/index";
 import { urls } from "../../../../config/urls";
+import QueuedDrawer from "../../../../components/QueuedDrawer";
 
 export function Terms({
   provider,
@@ -24,11 +25,11 @@ export function Terms({
   }, [provider]);
 
   return (
-    <BottomDrawer
-      isOpen={isOpen}
+    <QueuedDrawer
+      isRequestingToBeOpened={isOpen}
       noCloseButton
       Icon={Icons.InfoMedium}
-      iconColor="warning.c100"
+      iconColor="warning.c50"
       title={t("transfer.swap2.form.disclaimer.title")}
       description={t("transfer.swap2.form.disclaimer.desc", {
         providerName: getProviderName(provider),
@@ -43,6 +44,6 @@ export function Terms({
       <Button type="main" onPress={onClose} outline>
         {t("common.close")}
       </Button>
-    </BottomDrawer>
+    </QueuedDrawer>
   );
 }

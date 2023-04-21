@@ -15,6 +15,8 @@ import derivation from "./commands/derivation";
 import devDeviceAppsScenario from "./commands/devDeviceAppsScenario";
 import deviceAppVersion from "./commands/deviceAppVersion";
 import deviceInfo from "./commands/deviceInfo";
+import deviceSDKFirmwareUpdate from "./commands/deviceSDKFirmwareUpdate";
+import deviceSDKGetDeviceInfo from "./commands/deviceSDKGetDeviceInfo";
 import deviceVersion from "./commands/deviceVersion";
 import discoverDevices from "./commands/discoverDevices";
 import envs from "./commands/envs";
@@ -31,7 +33,6 @@ import getDeviceRunningMode from "./commands/getDeviceRunningMode";
 import getTransactionStatus from "./commands/getTransactionStatus";
 import i18n from "./commands/i18n";
 import liveData from "./commands/liveData";
-import makeCompoundSummary from "./commands/makeCompoundSummary";
 import managerListApps from "./commands/managerListApps";
 import portfolio from "./commands/portfolio";
 import proxy from "./commands/proxy";
@@ -74,6 +75,8 @@ export default {
   devDeviceAppsScenario,
   deviceAppVersion,
   deviceInfo,
+  deviceSDKFirmwareUpdate,
+  deviceSDKGetDeviceInfo,
   deviceVersion,
   discoverDevices,
   envs,
@@ -90,7 +93,6 @@ export default {
   getTransactionStatus,
   i18n,
   liveData,
-  makeCompoundSummary,
   managerListApps,
   portfolio,
   proxy,

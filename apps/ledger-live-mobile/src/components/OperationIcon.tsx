@@ -26,7 +26,7 @@ type Props = OwnProps & {
 };
 
 type FamilyOperationDetailsIntersection = UnionToIntersection<
-  typeof perFamilyOperationDetails[keyof typeof perFamilyOperationDetails]
+  (typeof perFamilyOperationDetails)[keyof typeof perFamilyOperationDetails]
 >;
 
 class OperationIcon extends PureComponent<Props> {
@@ -89,4 +89,4 @@ export default connect((state: State, props: OwnProps) => {
     type,
     confirmed: isConfirmed,
   };
-})(OperationIcon);
+})(React.memo(OperationIcon));

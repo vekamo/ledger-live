@@ -7,22 +7,30 @@ import {
 } from "@ledgerhq/live-common/explorers";
 import type { Account, OperationType, Operation } from "@ledgerhq/types-live";
 import { useCosmosFamilyPreloadData } from "@ledgerhq/live-common/families/cosmos/react";
-import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/formatCurrencyUnit";
+import { formatCurrencyUnit } from "@ledgerhq/live-common/currencies/index";
 import { BigNumber } from "bignumber.js";
 import { getAccountUnit } from "@ledgerhq/live-common/account/helpers";
 import type { CosmosDelegationInfo } from "@ledgerhq/live-common/families/cosmos/types";
 import { useSelector } from "react-redux";
+import cryptoFactory from "@ledgerhq/live-common/families/cosmos/chain/chain";
 import Section from "../../screens/OperationDetails/Section";
-import { urls } from "../../config/urls";
 import { discreetModeSelector, localeSelector } from "../../reducers/settings";
 
-function getURLFeesInfo(op: Operation): string | null | undefined {
-  return op.fee.gt(200000) ? urls.cosmosStakingRewards : undefined;
+function getURLFeesInfo(
+  op: Operation,
+  currencyId: string,
+): string | null | undefined {
+  return op.fee.gt(200000)
+    ? cryptoFactory(currencyId).stakingDocUrl
+    : undefined;
 }
 
-function getURLWhatIsThis(op: Operation): string | null | undefined {
+function getURLWhatIsThis(
+  op: Operation,
+  currencyId: string,
+): string | null | undefined {
   return op.type !== "IN" && op.type !== "OUT"
-    ? urls.cosmosStakingRewards
+    ? cryptoFactory(currencyId).stakingDocUrl
     : undefined;
 }
 

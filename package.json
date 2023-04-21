@@ -3,7 +3,6 @@
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
-  "packageManager": "pnpm@7.14.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/LedgerHQ/ledger-live.git"
@@ -12,16 +11,18 @@
     "url": "https://github.com/LedgerHQ/ledger-live/issues"
   },
   "scripts": {
+    "bump": "changeset version",
     "clean": "git clean -fdX",
     "changelog": "changeset add",
-    "bump": "changeset version",
     "prerelease": "pnpm run build:libs",
     "release": "changeset publish",
-    "build": "pnpm turbo build --no-daemon --ignore=apps/* --ignore=apps\\* --ignore=tools/actions/* --ignore=tools\\actions\\* --no-deps",
-    "build:libs": "pnpm turbo build --no-daemon --filter=\"!./apps/**\" --scope=@ledgerhq/* --include-dependencies --no-deps",
-    "build:libs:force": "pnpm -r --filter=\"!./apps/**\" --filter=\"!ledger-live\" build",
-    "build:actions": "pnpm turbo build --filter=@actions/* --no-deps",
+    "build:libs": "pnpm turbo build --no-daemon --filter=\"./libs/**\"",
+    "build:libs:force": "pnpm -r --filter=\"./libs/**\" build",
+    "build:actions": "pnpm turbo build --filter=@actions/*",
     "build:cli": "pnpm turbo build --no-daemon --filter=live-cli",
+    "build:coin": "pnpm turbo build --no-daemon --filter=coin-framework",
+    "build:coin:polkadot": "pnpm turbo build --no-daemon --filter=coin-polkadot",
+    "build:domain": "pnpm turbo build --no-daemon --filter=domain-service",
     "build:llc": "pnpm turbo build --no-daemon --filter=\"live-common\"",
     "build:lld": "pnpm turbo build --no-daemon --filter=ledger-live-desktop",
     "build:lld:deps": "pnpm turbo build --no-daemon --filter=\"ledger-live-desktop^...\"",
@@ -37,11 +38,11 @@
     "watch:common": "pnpm turbo watch --no-daemon --filter=live-common",
     "dev:cli": "pnpm turbo watch --no-daemon --filter=live-cli",
     "dev:lld": "pnpm turbo start --no-daemon --filter=ledger-live-desktop",
-    "dev:lld:debug": "DEV_TOOLS=1 LEDGER_INTERNAL_ARGS=--inspect pnpm turbo start --no-daemon --filter=ledger-live-desktop",
+    "dev:lld:debug": "DEV_TOOLS=1 LEDGER_INTERNAL_ARGS=--inspect ELECTRON_ARGS=--remote-debugging-port=8315 pnpm turbo start --no-daemon --filter=ledger-live-desktop",
     "dev:llm": "pnpm turbo start --no-daemon --filter=live-mobile",
     "release:lld": "pnpm turbo release --no-daemon --filter=ledger-live-desktop",
     "pre:lld": "pnpm turbo pre-build --no-daemon --filter=ledger-live-desktop",
-    "nightly": "pnpm turbo nightly --no-daemon --include-dependencies --no-deps",
+    "nightly": "pnpm turbo nightly --no-daemon",
     "nightly:lld": "pnpm turbo nightly --no-daemon --filter=ledger-live-desktop",
     "test": "pnpm turbo test --no-daemon --concurrency=100%",
     "run:cli": "./apps/cli/bin/index.js",
@@ -50,9 +51,13 @@
     "typecheck": "pnpm turbo typecheck --no-daemon",
     "desktop": "pnpm --filter ledger-live-desktop",
     "cli": "pnpm --filter live-cli",
+    "coin": "pnpm --filter coin-framework",
+    "coin:polkadot": "pnpm --filter coin-polkadot",
+    "domain": "pnpm --filter domain-service",
     "mobile": "pnpm --filter live-mobile",
     "common": "pnpm --filter live-common",
     "common-tools": "pnpm --filter live-common-tools",
+    "utils": "pnpm --filter live-utils",
     "bot:github": "pnpm --filter live-github-bot",
     "ljs:cryptoassets": "pnpm --filter cryptoassets",
     "ljs:devices": "pnpm --filter devices",
@@ -94,37 +99,32 @@
     "actions": "pnpm --filter @actions/*"
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.6",
-    "@changesets/cli": "^2.24.3",
+    "@changesets/changelog-github": "^0.4.8",
+    "@changesets/cli": "^2.26.0",
+    "@commitlint/cli": "^17.4.2",
+    "@commitlint/config-conventional": "^17.4.2",
+    "@commitlint/prompt-cli": "^17.4.2",
     "create-release-hash": "workspace:*",
     "migrate-branch": "workspace:*",
     "pnpm-utils": "workspace:*",
-    "rimraf": "^3.0.2",
-    "turbo": "^1.6.1",
-    "zx": "^7.0.7"
+    "rimraf": "^4.1.2",
+    "turbo": "^1.8.8",
+    "zx": "^7.2.1"
   },
   "pnpm": {
     "overrides": {
       "stellar-base>sodium-native": "^3.2.1",
-      "metro": "^0.67.0",
-      "metro-config": "^0.67.0",
-      "metro-core": "^0.67.0",
-      "metro-react-native-babel-transformer": "^0.67.0",
-      "metro-resolver": "^0.67.0",
-      "metro-runtime": "^0.67.0",
-      "metro-transform-worker": "^0.67.0",
       "remove-flow-types-loader>flow-remove-types": "^2",
       "remove-flow-types-loader>loader-utils": "*"
     },
     "patchedDependencies": {
       "react-native-fast-crypto@2.2.0": "patches/react-native-fast-crypto@2.2.0.patch",
       "react-native-video@5.2.0": "patches/react-native-video@5.2.0.patch",
-      "react-native-image-crop-tools@1.6.2": "patches/react-native-image-crop-tools@1.6.2.patch",
       "rn-fetch-blob@0.12.0": "patches/rn-fetch-blob@0.12.0.patch",
-      "react-native-os@1.2.6": "patches/react-native-os@1.2.6.patch",
-      "react-native-tcp@4.0.0": "patches/react-native-tcp@4.0.0.patch",
+      "react-native-image-crop-tools@1.6.4": "patches/react-native-image-crop-tools@1.6.4.patch",
       "socks-proxy-agent@7.0.0": "patches/socks-proxy-agent@7.0.0.patch",
-      "react-native-aes-crypto@2.1.1": "patches/react-native-aes-crypto@2.1.1.patch"
+      "react-native-aes-crypto@2.1.1": "patches/react-native-aes-crypto@2.1.1.patch",
+      "react-native-webview@11.26.1": "patches/react-native-webview@11.26.1.patch"
     }
   }
 }

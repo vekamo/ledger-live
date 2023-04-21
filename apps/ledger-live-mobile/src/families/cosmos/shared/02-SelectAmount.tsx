@@ -29,9 +29,6 @@ import { ScreenName } from "../../../const";
 import type { StackNavigatorProps } from "../../../components/RootNavigator/types/helpers";
 import type { CosmosDelegationFlowParamList } from "../DelegationFlow/types";
 import type { CosmosRedelegationFlowParamList } from "../RedelegationFlow/types";
-import type { OsmosisDelegationFlowParamList } from "../../osmosis/DelegationFlow/types";
-import { OsmosisRedelegationFlowParamList } from "../../osmosis/RedelegationFlow/types";
-import { OsmosisUndelegationFlowParamList } from "../../osmosis/UndelegationFlow/types";
 import { CosmosUndelegationFlowParamList } from "../UndelegationFlow/types";
 
 type Props =
@@ -43,18 +40,6 @@ type Props =
       CosmosRedelegationFlowParamList,
       | ScreenName.CosmosDefaultRedelegationAmount
       | ScreenName.CosmosRedelegationAmount
-    >
-  | StackNavigatorProps<
-      OsmosisDelegationFlowParamList,
-      ScreenName.OsmosisDelegationAmount
-    >
-  | StackNavigatorProps<
-      OsmosisRedelegationFlowParamList,
-      ScreenName.OsmosisRedelegationAmount
-    >
-  | StackNavigatorProps<
-      OsmosisUndelegationFlowParamList,
-      ScreenName.OsmosisUndelegationAmount
     >
   | StackNavigatorProps<
       CosmosUndelegationFlowParamList,
@@ -207,10 +192,10 @@ function DelegationAmount({ navigation, route }: Props) {
             >
               {error && !value.eq(0) && (
                 <View style={styles.labelContainer}>
-                  <Warning size={16} color={colors.error.c100} />
+                  <Warning size={16} color={colors.error.c50} />
                   <LText
                     style={[styles.assetsRemaining]}
-                    color={colors.error.c100}
+                    color={colors.error.c50}
                   >
                     <Trans
                       i18nKey={
@@ -238,10 +223,10 @@ function DelegationAmount({ navigation, route }: Props) {
               )}
               {max.isZero() && (
                 <View style={styles.labelContainer}>
-                  <Check size={16} color={colors.success.c100} />
+                  <Check size={16} color={colors.success.c50} />
                   <LText
                     style={[styles.assetsRemaining]}
-                    color={colors.success.c100}
+                    color={colors.success.c50}
                   >
                     <Trans
                       i18nKey={`cosmos.${mode}.flow.steps.amount.allAssetsUsed`}

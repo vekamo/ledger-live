@@ -10,13 +10,14 @@ import filecoin from "../families/filecoin/cli-transaction";
 import hedera from "../families/hedera/cli-transaction";
 import mimblewimble_coin from "../families/mimblewimble_coin/cli-transaction";
 import near from "../families/near/cli-transaction";
-import osmosis from "../families/osmosis/cli-transaction";
-import polkadot from "../families/polkadot/cli-transaction";
 import ripple from "../families/ripple/cli-transaction";
 import solana from "../families/solana/cli-transaction";
 import stellar from "../families/stellar/cli-transaction";
 import tezos from "../families/tezos/cli-transaction";
 import tron from "../families/tron/cli-transaction";
+import { makeLRUCache } from "../cache";
+import network from "../network";
+import polkadotCreateCliTools from "@ledgerhq/coin-polkadot/cli-transaction";
 
 export default {
   algorand,
@@ -31,11 +32,10 @@ export default {
   hedera,
   mimblewimble_coin,
   near,
-  osmosis,
-  polkadot,
   ripple,
   solana,
   stellar,
   tezos,
   tron,
+  polkadot: polkadotCreateCliTools(network, makeLRUCache),
 };

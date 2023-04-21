@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Platform, ScrollView, StyleSheet } from "react-native";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import styled from "styled-components/native";
 import { LockedDeviceError, WrongDeviceForAccount } from "@ledgerhq/errors";
 import { TokenCurrency } from "@ledgerhq/types-cryptoassets";
@@ -36,6 +36,8 @@ import {
   getMainAccount,
   getAccountName,
   getAccountCurrency,
+  getFeesCurrency,
+  getFeesUnit,
 } from "@ledgerhq/live-common/account/index";
 import { TFunction } from "react-i18next";
 import { DeviceModelId } from "@ledgerhq/types-devices";
@@ -45,7 +47,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import { ParamListBase } from "@react-navigation/native";
 import isFirmwareUpdateVersionSupported from "@ledgerhq/live-common/hw/isFirmwareUpdateVersionSupported";
 import { lastSeenDeviceSelector } from "../../reducers/settings";
-import { setModalLock } from "../../actions/appstate";
 import { urls } from "../../config/urls";
 import Alert from "../Alert";
 import { lighten, Theme } from "../../colors";
@@ -59,7 +60,7 @@ import Circle from "../Circle";
 import { MANAGER_TABS } from "../../const/manager";
 import { providerIcons } from "../../icons/swap/index";
 import ExternalLink from "../ExternalLink";
-import { track } from "../../analytics";
+import { TrackScreen, track } from "../../analytics";
 import CurrencyUnitValue from "../CurrencyUnitValue";
 import TermsFooter, { TermsProviders } from "../TermsFooter";
 import CurrencyIcon from "../CurrencyIcon";
@@ -71,9 +72,9 @@ import {
   Props as FramedImageWithLottieProps,
   FramedImageWithLottieWithContext,
 } from "../CustomImage/FramedImageWithLottie";
-
-const confirmLockscreen = require("../animations/stax/customimage/confirmLockscreen.json"); // eslint-disable-line @typescript-eslint/no-var-requires, import/no-unresolved
-const allowConnection = require("../animations/stax/customimage/allowConnection.json"); // eslint-disable-line @typescript-eslint/no-var-requires, import/no-unresolved
+import ModalLock from "../ModalLock";
+import confirmLockscreen from "../../animations/stax/customimage/confirmLockscreen.json";
+import allowConnection from "../../animations/stax/customimage/allowConnection.json";
 
 const Wrapper = styled(Flex).attrs({
   flex: 1,
@@ -330,10 +331,12 @@ export function renderConfirmSwap({
           <FieldItem title={t("DeviceAction.swap2.fees")}>
             <Text>
               <CurrencyUnitValue
-                unit={getAccountUnit(
-                  getMainAccount(
-                    exchange.fromAccount,
-                    exchange.fromParentAccount,
+                unit={getFeesUnit(
+                  getFeesCurrency(
+                    getMainAccount(
+                      exchange.fromAccount,
+                      exchange.fromParentAccount,
+                    ),
                   ),
                 )}
                 value={new BigNumber(estimatedFees || 0)}
@@ -447,10 +450,11 @@ export function renderAllowLanguageInstallation({
   device: Device;
 }) {
   const deviceName = getDeviceModel(device.modelId).productName;
-  const key = device.modelId === "stax" ? "allowConnection" : "sign";
+  const key = device.modelId === "stax" ? "allowManager" : "sign";
 
   return (
     <Wrapper>
+      <TrackScreen category="Allow language installation on Stax" />
       <Text variant="h4" textAlign="center">
         {t("deviceLocalization.allowLanguageInstallation", { deviceName })}
       </Text>
@@ -893,6 +897,7 @@ export function renderLoading({
         <InfiniteLoader />
       </SpinnerContainer>
       <CenteredText>{description ?? t("DeviceAction.loading")}</CenteredText>
+      <ModalLock />
     </Wrapper>
   );
 }
@@ -955,17 +960,6 @@ export function LoadingAppInstall({
   description?: string;
   request?: AppRequest;
 }) {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    // Nb Blocks closing the modal while the install is happening.
-    // releases the block on onmount.
-    dispatch(setModalLock(true));
-    return () => {
-      dispatch(setModalLock(false));
-    };
-  }, [dispatch]);
-
   const currency = request?.currency || request?.account?.currency;
   const appName = request?.appName || currency?.managerAppName;
   useEffect(() => {
@@ -975,6 +969,7 @@ export function LoadingAppInstall({
     ] as const;
     track(...trackingArgs);
   }, [appName, analyticsPropertyFlow]);
+
   return renderLoading(props);
 }
 

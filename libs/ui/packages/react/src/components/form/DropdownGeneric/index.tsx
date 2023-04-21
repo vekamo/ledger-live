@@ -37,7 +37,7 @@ const DropdownContainer = styled(Flex).attrs(({ theme }) => {
 `;
 
 export const placements = ["bottom-start", "bottom", "bottom-end"] as const;
-type Placement = typeof placements[number];
+type Placement = (typeof placements)[number];
 
 export type Props = {
   /**

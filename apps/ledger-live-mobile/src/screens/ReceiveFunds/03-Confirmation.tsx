@@ -251,9 +251,9 @@ function ReceiveConfirmationInner({
                 justifyContent="center"
                 flexDirection="row"
               >
-                <Icons.ShieldCheckMedium color="success.c100" size={16} />
+                <Icons.ShieldCheckMedium color="success.c50" size={16} />
                 <Text
-                  color="success.c100"
+                  color="success.c50"
                   fontWeight="medium"
                   variant="paragraphLineHeight"
                   ml={2}
@@ -269,12 +269,9 @@ function ReceiveConfirmationInner({
                     justifyContent="center"
                     flexDirection="row"
                   >
-                    <Icons.ShieldSecurityMedium
-                      color="warning.c100"
-                      size={16}
-                    />
+                    <Icons.ShieldSecurityMedium color="warning.c50" size={16} />
                     <Text
-                      color="warning.c100"
+                      color="warning.c50"
                       fontWeight="medium"
                       variant="paragraphLineHeight"
                       ml={2}

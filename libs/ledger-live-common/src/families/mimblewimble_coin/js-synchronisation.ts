@@ -1,6 +1,6 @@
 import {
   GetAccountShape,
-  GetAccountShapeArg0,
+  AccountShapeInfo,
   makeSync,
   makeScanAccounts,
 } from "../../bridge/jsHelpers";
@@ -19,7 +19,7 @@ import Crypto from "./api/crypto";
 import Consensus from "./api/consensus";
 
 const getAccountShape: GetAccountShape = async (
-  arg0: GetAccountShapeArg0
+  info: AccountShapeInfo
 ): Promise<Partial<Account>> => {
   const {
     currency,
@@ -29,7 +29,7 @@ const getAccountShape: GetAccountShape = async (
     transport,
     derivationPath,
     o,
-  } = arg0;
+  } = info;
   const cacheCleared =
     initialAccount &&
     initialAccount.lastSyncDate.valueOf() === new Date(0).valueOf();

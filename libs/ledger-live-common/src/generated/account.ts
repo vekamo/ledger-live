@@ -6,8 +6,7 @@ import elrond from "../families/elrond/account";
 import filecoin from "../families/filecoin/account";
 import mimblewimble_coin from "../families/mimblewimble_coin/account";
 import near from "../families/near/account";
-import osmosis from "../families/osmosis/account";
-import polkadot from "../families/polkadot/account";
+import polkadot from "@ledgerhq/coin-polkadot/account";
 
 export default {
   algorand,
@@ -18,6 +17,5 @@ export default {
   filecoin,
   mimblewimble_coin,
   near,
-  osmosis,
   polkadot,
 };

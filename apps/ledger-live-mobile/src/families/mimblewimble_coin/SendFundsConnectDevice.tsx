@@ -120,11 +120,14 @@ function useSignedTxHandler({
           { ...route.params, result: operation },
         );
         dispatch(
-          updateAccountWithUpdater(mainAccount.id, (account: Account) => {
-            return addSentTransactionToAccount(
-              addPendingOperation(account, operation),
-              signedOperation,
-            );
+          updateAccountWithUpdater({
+            accountId: mainAccount.id,
+            updater: (account: Account) => {
+              return addSentTransactionToAccount(
+                addPendingOperation(account, operation),
+                signedOperation,
+              );
+            },
           }),
         );
       } catch (error) {

@@ -14,28 +14,18 @@ const ActionRowWrapper = styled(Flex)<{ completed: boolean }>`
 `;
 
 const PostOnboardingActionRow: React.FC<Props> = props => {
-  const {
-    id,
-    navigationParams,
-    Icon,
-    title,
-    description,
-    tagLabel,
-    startAction,
-    startEvent,
-    startEventProperties,
-    completed,
-  } = props;
+  const { id, Icon, title, description, tagLabel, buttonLabelForAnalyticsEvent, completed } = props;
   const { t } = useTranslation();
   const history = useHistory();
 
   const handleStartAction = useCallback(() => {
-    if (navigationParams) history.push(navigationParams);
-    else if (startAction) {
-      startAction();
-      startEvent && track(startEvent, startEventProperties);
+    if ("navigationParams" in props && props.navigationParams) history.push(props.navigationParams);
+    else if ("startAction" in props) {
+      props.startAction();
+      buttonLabelForAnalyticsEvent &&
+        track("button_clicked", { button: buttonLabelForAnalyticsEvent });
     }
-  }, [history, navigationParams, startAction, startEvent, startEventProperties]);
+  }, [props, history, buttonLabelForAnalyticsEvent]);
 
   return (
     <ActionRowWrapper
@@ -86,7 +76,7 @@ const PostOnboardingActionRow: React.FC<Props> = props => {
           </Tag>
         ) : null}
         {completed ? (
-          <Icons.CheckAloneMedium color="success.c100" size={16} />
+          <Icons.CheckAloneMedium color="success.c50" size={16} />
         ) : (
           <Icons.ChevronRightMedium color="neutral.c100" size={16} />
         )}

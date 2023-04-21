@@ -84,6 +84,7 @@
     "save": "Save",
     "lock": "Lock",
     "showMore": "Show more",
+    "backToMatchingURL": "Back to {{appName}}",
     "back": "Back",
     "adjustFees": "Adjust fees",
     "reset": "Reset",
@@ -118,7 +119,6 @@
       "syncing": "Synchronizing...",
       "upToDate": "Synchronized",
       "outdated": "Paused",
-      "needsMigration": "Click to update account",
       "error": "Synchronization error",
       "refresh": "Refresh",
       "devTools": "Dev tools"
@@ -146,8 +146,6 @@
       "DELEGATE": "Delegated",
       "REDELEGATE": "Redelegated",
       "UNDELEGATE": "Undelegated",
-      "SUPPLY": "Deposited",
-      "REDEEM": "Withdrawn",
       "APPROVE": "Approved",
       "VOTE": "Voted",
       "FREEZE": "Frozen",
@@ -215,26 +213,23 @@
     "stars": "Starred accounts",
     "accounts": "Accounts",
     "manager": "My Ledger",
+    "earn": "Earn",
     "exchange": "Buy / Sell",
     "swap": "Swap",
     "lend": "Lend",
     "catalog": "Discover",
-    "market": "Market"
+    "market": "Market",
+    "protect": "Recover"
   },
   "stars": {
     "placeholder": "Star an account to display it here.",
     "tooltip": "Star account"
   },
   "bridge": {
-    "modalTitle": "Open Device Bridge",
-    "openHeader": "Expose your Device accounts through WebSocket",
-    "openDescription": "Opening a bridge exposes all of your accounts to third party applications.",
-    "openedHeader": "{{appName}} bridge opened",
-    "openedDescription": "You can now access your {{appName}} account on third party web application through WebSocket.",
-    "completeHeader": "Bridge session completed",
-    "completeDescription": "The websocket bridge is now closed.",
-    "openButton": "Open",
-    "disconnectButton": "Disconnect"
+    "modalTitle": "Device Bridge",
+    "openHeader": "Device bridge is no longer available",
+    "openDescription": "Please configure your browser wallet extensions to use WebHID instead of Ledger Live.",
+    "closeButton": "Close"
   },
   "swap2": {
     "title": "Swap",
@@ -820,12 +815,44 @@
       "redelegation": {
         "title": "In case you didn’t know...",
         "description": "The Ledger validator stakes at a lower commission than the validator you’re using.",
-        "cta": "Redelegate with Ledger"
+        "cta": "Redelegate with Ledger",
+        "linkText": "What is redelegation and how long does it take?",
+        "solana": {
+          "title": "Did you know?",
+          "description": "Ledger offers a lower commission rate than your validator. This process can take up to 4 days."
+        },
+        "near": {
+          "title": "Did you know?",
+          "description": "Ledger offers a lower commission rate than your validator. This process can take up to 65 hours."
+        },
+        "elrond": {
+          "title": "Did you know?",
+          "description": "Ledger offers a lower commission rate than your validator. This process can take up to 10 days."
+        }
       },
       "delegation": {
         "title": "In case you didn’t know...",
         "description": "The Ledger validator stakes your {{asset}} at a commission of {{commission}}%.",
-        "cta": "Stake with Ledger"
+        "cta": "Stake with Ledger",
+        "linkText": "Learn more",
+        "ethereum": {
+          "lido": {
+            "title": "In case you didn’t know...",
+            "description": "Stake your Ethereum with Lido and earn rewards daily. No lock-up period. No minimum deposit.",
+            "cta": "Stake with Lido"
+          },
+          "kiln": {
+            "title": "Don’t just HODL. Grow your ETH",
+            "description": "Got more than 32 ETH? Earn passive rewards by securely staking your ETH with Kiln.",
+            "cta": "Stake with Kiln"
+          }
+        },
+        "near": {
+          "description": "Stake your NEAR with Ledger by Figment validator. Your coins stay yours, backed by Ledger’s uncompromising security."
+        },
+        "elrond": {
+          "description": "Stake your ELROND with Ledger by Figment validator. Your coins stay yours, backed by Ledger’s uncompromising security."
+        }
       }
     }
   },
@@ -1122,6 +1149,7 @@
       "receive": "Receive",
       "send": "Send",
       "swap": "Swap",
+      "stake": "Stake",
       "buy": "Buy",
       "sell": "Sell",
       "edit": "Edit account",
@@ -1186,9 +1214,13 @@
         "description": "Your PIN can be 4 to 8 digits long",
         "text": "Anyone with access to your {{deviceName}} and to your PIN can also access all your crypto and NFT assets."
       },
-      "recoveryContent": {
-        "title": "Recovery phrase",
-        "content": "Tap on the videos below to learn more about your secret recovery phrase"
+      "seedContent": {
+        "title": "Secret Recovery Phrase",
+        "choiceNewOrRestore": "Choose a setup option that best suits you.",
+        "newSeed": "Tap on the videos below to learn more about your secret recovery phrase",
+        "choiceRestoreDirectOrRecover": "Placeholder - choice direct restore or use Recover",
+        "recoverSeed": "Placeholder: Recover",
+        "restoreSeed": "For recovery, make sure to use a Secret Recovery Phrase generated by a Ledger for the guaranted security of your assets.\n\nDon't have one? Use your {{productName}} to generate a new Phrase."
       },
       "softwareCheckContent": {
         "title": "Software check",
@@ -1399,7 +1431,7 @@
         "label": "Popular"
       },
       "earn": {
-        "title": "Earn",
+        "title": "Stake",
         "description": "Grow your crypto with Ledger"
       }
     }
@@ -1588,42 +1620,6 @@
     "hideSubAccounts": "Hide subaccounts ({{tokenCount}})",
     "countTooltip": "1 subaccount",
     "countTooltip_plural": "{{count}} subaccounts"
-  },
-  "migrateAccounts": {
-    "overview": {
-      "title": "Ledger Live accounts update",
-      "successTitle": "Accounts updated successfully",
-      "successDescPlu": "Your {{assets}} accounts are now updated and ready to use",
-      "successDesc": "Your {{assets}} account is now updated and ready to use",
-      "mobileTitle": "Export accounts to mobile",
-      "mobileDesc": "Click the button below to export your updated accounts to the Ledger Live mobile app.",
-      "mobileCTA": "Export to mobile",
-      "description": "New features in Ledger Live require an update of your accounts.",
-      "currency": "1 {{currency}} account needs to be updated:",
-      "currency_plural": "{{count}} {{currency}} accounts need to be updated:",
-      "footer": "You need your Ledger Device to complete the update",
-      "pendingDevices": "1 account could not be updated. Please connect the device associated to the account below",
-      "pendingDevices_plural": "{{totalMigratableAccounts}} accounts could not be updated. Please connect the device associated to the account below",
-      "doItLaterBtn": "Do it later"
-    },
-    "progress": {
-      "finished": {
-        "title": "{{currencyName}} update completed",
-        "description": ""
-      },
-      "scanning": {
-        "title": "{{currencyName}} update in progress...",
-        "description": "Please wait for your accounts to be updated"
-      },
-      "finished-empty": {
-        "title": "{{currencyName}} update incomplete",
-        "description": "No {{currencyName}} accounts to update"
-      }
-    },
-    "cta": {
-      "startUpdate": "Start update",
-      "nextCurrency": "Continue with {{currency}} update"
-    }
   },
   "addAccounts": {
     "title": "Add accounts",
@@ -1814,7 +1810,7 @@
       "used": "Used",
       "firmwareAvailable": "Firmware is outdated:",
       "firmwareUpToDate": "Firmware is up to date:",
-      "genuine": "Device is genuine",
+      "genuine": "Your device is Genuine",
       "incomplete": "Some apps were not recognized. Please uninstall, then reinstall them."
     },
     "applist": {
@@ -1879,7 +1875,7 @@
         "plugin": "Go to app",
         "swap": "Swap",
         "tool": "Learn more",
-        "app": "Learn more"
+        "currency": "Learn more"
       },
       "uninstall": {
         "title": "Uninstall all",
@@ -2150,7 +2146,13 @@
     "steps": {
       "recipient": {
         "title": "Recipient",
-        "nftRecipient": "NFT to send"
+        "nftRecipient": "NFT to send",
+        "verifyAddress": "Please verify the address matches the one shared by the recipient.",
+        "namingService": {
+          "resolve": "This is a valid ENS linked to the following address :",
+          "supportLink": "What's an Ethereum Name Service ?",
+          "reverse": "This address is linked to {{domain}}"
+        }
       },
       "amount": {
         "title": "Amount",
@@ -2236,6 +2238,13 @@
     },
     "switchButton": "Switch to {{language}}",
     "no": "I prefer not to"
+  },
+  "deviceRename": {
+    "title": "Rename {{ productName }}",
+    "chooseName": "Choose a name",
+    "placeholder": "Tony's Stax",
+    "remainingCharacters": "{{ remainingCharacters }} characters remaining",
+    "renamed": "{{ productName }} name changed to \n“{{ name }}” "
   },
   "deviceLocalization": {
     "language": "Language",
@@ -2483,6 +2492,8 @@
       },
       "manageTP": "Manage assets",
       "warnEarnRewards": "You need at least {{amount}} to start earning rewards",
+      "warnDisableStaking": "Not available",
+      "warnDisableStakingMessage": "Staking feature for Tron is currently unavailable",
       "claimRewards": "Claim rewards",
       "nextRewardsDate": "Rewards can be claimed {{date}}",
       "claimAvailableRewards": "Claim {{amount}}",
@@ -2851,7 +2862,7 @@
   "cosmos": {
     "delegation": {
       "emptyState": {
-        "description": "You can earn ATOM rewards by delegating your assets.",
+        "description": "You can earn {{currencyTicker}} rewards by delegating your assets.",
         "info": "How Delegation works",
         "delegation": "Earn rewards"
       },
@@ -2876,11 +2887,11 @@
         "title": "Delegate",
         "steps": {
           "starter": {
-            "description": "You may earn rewards by delegating your ATOM assets to a validator.",
+            "description": "You may earn rewards by delegating your {{currencyTicker}} assets to a validator.",
             "bullet": [
               "You keep ownership of delegated assets",
               "Delegate using your Ledger device",
-              "Assets will be available 21 days after undelegation"
+              "Assets will be available {{numberOfDays}} days after undelegation"
             ],
             "warning": {
               "description": "Choose your validator wisely: Part of your delegated assets may be irrevocably lost if the validator does not behave appropriately."
@@ -2958,7 +2969,7 @@
             "currentDelegation": "Current delegation",
             "newDelegation": "New delegation",
             "chooseValidator": "Choose a validator",
-            "warning": "You will have to wait <0>21 days</0> to redelegate from the new validator, if you change your mind again",
+            "warning": "You will have to wait <0>{{numberOfDays}} days</0> to redelegate from the new validator, if you change your mind again",
             "amountLabel": "Amount to redelegate"
           },
           "device": {
@@ -2985,8 +2996,8 @@
         "steps": {
           "amount": {
             "title": "Amount",
-            "subtitle": "The undelegation process takes <0>21 days</0> to finalize.",
-            "warning": "Rewards will be immediately cashed in. The undelegated amount will be back in the available balance after the <0>21-day timelock</0>.",
+            "subtitle": "The undelegation process takes <0>{{numberOfDays}} days</0> to finalize.",
+            "warning": "Rewards will be immediately cashed in. The undelegated amount will be back in the available balance after the <0>{{numberOfDays}}-day timelock</0>.",
             "fields": {
               "validator": "Validator",
               "amount": "Amount to undelegate"
@@ -3070,180 +3081,6 @@
             "success": {
               "title": "Rewards successfully claimed!",
               "text": "Your rewards were added to your available balance",
-              "cta": "View details"
-            },
-            "broadcastError": "Your transaction may have failed. Please wait a moment then check the transaction history before trying again."
-          }
-        }
-      }
-    }
-  },
-  "osmosis": {
-    "account": {
-      "subHeader": {
-        "cardTitle": "Powered by Figment",
-        "moreInfo": "More info",
-        "drawerTitle": "Powered by Figment",
-        "title": "The OSMO token is now available on Ledger Live",
-        "description": "You can now start to manage your OSMO tokens and secure them through Ledger Live.",
-        "description2": "The OSMO token is native to the Osmosis chain and is used for everything from transactions, staking and many upcoming features.",
-        "website": "Powered by Figment"
-      }
-    },
-    "memo": "Memo",
-    "memoPlaceholder": "Optional",
-    "memoWarningText": "When using a memo, carefully check the information with the recipient",
-    "delegation": {
-      "emptyState": {
-        "description": "You can earn OSMO rewards by delegating your assets.",
-        "info": "How Delegation works",
-        "delegation": "Earn rewards"
-      },
-      "commission": "Commission",
-      "totalStake": "Total Stake",
-      "claimRewards": "Claim rewards",
-      "header": "Delegation(s)",
-      "noRewards": "No rewards available",
-      "delegate": "Add",
-      "undelegate": "Undelegate",
-      "redelegate": "Redelegate",
-      "redelegateDisabledTooltip": "You can redelegate again <0>{{days}}</0>",
-      "redelegateMaxDisabledTooltip": "You cannot redelegate more than <0>7</0> validators at a time",
-      "undelegateDisabledTooltip": "You cannot undelegate more than <0>7</0> validators at a time",
-      "reward": "Claim rewards",
-      "currentDelegation": "Delegated: <0>{{amount}}</0>",
-      "estYield": "est. yield",
-      "activeTooltip": "Delegated amounts generate rewards",
-      "inactiveTooltip": "Undelegated amounts do not generate rewards",
-      "minSafeWarning": "Not enough funds",
-      "flow": {
-        "title": "Delegate",
-        "steps": {
-          "starter": {
-            "description": "You may earn rewards by delegating your OSMO assets to a validator.",
-            "bullet": [
-              "You keep ownership of delegated assets",
-              "Delegate using your Ledger device",
-              "Assets will be available 14 days after undelegation"
-            ],
-            "warning": {
-              "description": "Choose your validator wisely: Part of your delegated assets may be irrevocably lost if the validator does not behave appropriately."
-            }
-          },
-          "amount": {
-            "title": "Amount"
-          },
-          "validator": {
-            "title": "Validators"
-          },
-          "connectDevice": {
-            "title": "Device"
-          },
-          "confirmation": {
-            "title": "Confirmation",
-            "success": {
-              "title": "You have successfully delegated your assets",
-              "text": "Your account balance will be updated when the blockchain confirms the transaction.",
-              "cta": "View details"
-            },
-            "broadcastError": "Your transaction may have failed. Please wait a moment then check the transaction history before trying again."
-          }
-        }
-      }
-    },
-    "claimRewards": {
-      "flow": {
-        "title": "Claim rewards",
-        "steps": {
-          "claimRewards": {
-            "title": "Rewards",
-            "compound": "Compound",
-            "claim": "Cash in",
-            "compoundOrClaim": "Compound or cash in",
-            "compoundDescription": "Rewards will be added to delegated amount",
-            "claimDescription": "Rewards will be added to the available balance",
-            "compoundInfo": "You earned <0>{{amount}}</0>. By clicking Continue, they will be claimed now and automatically delegated to the same validator.",
-            "claimInfo": "You earned <0>{{amount}}</0> from the validator below. By clicking Continue, they will be claimed now and automatically added to the available balance.",
-            "selectLabel": "Select a delegation"
-          },
-          "connectDevice": {
-            "title": "Device"
-          },
-          "confirmation": {
-            "title": "Confirmation",
-            "label": "Confirmation",
-            "success": {
-              "title": "Rewards cashed in successfully",
-              "titleCompound": "Rewards compounded successfully",
-              "text": "Your rewards were added to your available balance",
-              "textCompound": "Your rewards <0>{{amount}}</0> were automatically delegated to <0>{{validator}}</0>",
-              "cta": "View details"
-            },
-            "pending": {
-              "title": "Broadcasting transaction..."
-            },
-            "broadcastError": "Your transaction may have failed. Please wait a moment then check the transaction history before trying again."
-          }
-        }
-      }
-    },
-    "redelegation": {
-      "flow": {
-        "title": "Redelegate assets",
-        "steps": {
-          "starter": {
-            "title": "Redelegation",
-            "description": "Use redelegation to easily change from one validator to another. But if you change your mind again, you will then have to wait because redelegation triggers a 14-day timelock.",
-            "warning": "Choose your validator wisely: Part of your delegated assets may be irrevocably lost if the validator does not behave appropriately. You can have a maximum of <0>7 pending redelegations</0>.",
-            "howDelegationWorks": "How delegation works?"
-          },
-          "validators": {
-            "title": "Validators",
-            "currentDelegation": "Current delegation",
-            "newDelegation": "New delegation",
-            "chooseValidator": "Choose a validator",
-            "warning": "You will have to wait <0>14 days</0> to redelegate from the new validator, if you change your mind again",
-            "amountLabel": "Amount to redelegate"
-          },
-          "device": {
-            "title": "Device"
-          },
-          "confirmation": {
-            "title": "Confirmation",
-            "success": {
-              "title": "You have successfully redelegated your assets",
-              "text": "The redelegation will update once the blockchain has confirmed the transaction",
-              "cta": "View details"
-            },
-            "broadcastError": "Your transaction may have failed. Please wait a moment then check the transaction history before trying again."
-          }
-        }
-      }
-    },
-    "undelegation": {
-      "header": "Undelegation(s)",
-      "headerTooltip": "Available after the 14-day timelock",
-      "inactiveTooltip": "Undelegated amounts do not generate rewards.",
-      "flow": {
-        "title": "Undelegate assets",
-        "steps": {
-          "amount": {
-            "title": "Amount",
-            "subtitle": "The undelegation process takes <0>14 days</0> to finalize.",
-            "warning": "Rewards will be immediately cashed in. The undelegated amount will be back in the available balance after the <0>14-day timelock</0>.",
-            "fields": {
-              "validator": "Validator",
-              "amount": "Amount to undelegate"
-            }
-          },
-          "device": {
-            "title": "Device"
-          },
-          "confirmation": {
-            "title": "Confirmation",
-            "success": {
-              "title": "You have successfully undelegated your assets.",
-              "description": "<0>{{amount}}</0> were undelegated from <0>{{validator}}</0>",
               "cta": "View details"
             },
             "broadcastError": "Your transaction may have failed. Please wait a moment then check the transaction history before trying again."
@@ -3951,6 +3788,9 @@
       "catalogRampServerDesc": "Switch between multiple trading providers",
       "enablePlatformDevTools": "Enable platform dev tools",
       "enablePlatformDevToolsDesc": "Enable opening platform apps dev tools window",
+      "customLockScreen": "Custom lock-screen assets",
+      "customLockScreenDesc": "Debug custom lock-screen graphical assets",
+      "customLockScreenCTA": "Launch",
       "featureFlagsTitle": "Defined feature flags used in Ledger Live",
       "featureFlagsDesc": "Overridden values will be reset if the app is relaunched. Only valid JSON strings will be accepted.",
       "featureFlagsEdit": "Edit",
@@ -3966,7 +3806,11 @@
       "runLocalAppDeleteButton": "Delete",
       "runLocalAppOpenButton": "Open",
       "enableLearnStagingUrl": "Learn page staging URL",
-      "enableLearnStagingUrlDesc": "Enable the staging URL for the learn page."
+      "enableLearnStagingUrlDesc": "Enable the staging URL for the learn page.",
+      "enableStagingNftMetadataService": "Staging NFT metadata service",
+      "enableStagingNftMetadataServiceDesc": "Enable the staging NFT metadata service and reset the NFT cache",
+      "openOnboardingAppInstallDebug": "Open onboarding app install debug screen",
+      "openOnboardingAppInstallDebugDesc": "Open a screen with the components from the sync onboarding app installation step"
     },
     "currencies": {
       "selectPlaceholder": "Select crypto asset",
@@ -4014,10 +3858,6 @@
           "title": "Experimental integrations",
           "description": "Use available experimental crypto assets integrations."
         },
-        "experimentalExecutionOnRenderer": {
-          "title": "Experimental networking",
-          "description": "Use experimental networking to optimize your Ledger Live experience with your VPN. Activate this only if your current VPN causes system errors."
-        },
         "experimentalLanguages": {
           "title": "Translation testing",
           "description": "Adds unreleased languages to the language list in the general settings tab."
@@ -4025,6 +3865,10 @@
         "managerDevMode": {
           "title": "Developer mode",
           "description": "Show developer and testnet apps in My Ledger."
+        },
+        "listAppsV2": {
+          "title": "Experimental list apps for My Ledger",
+          "description": "Performance improvement for My Ledger access and inline flows."
         },
         "scanForInvalidPaths": {
           "title": "Extended account search",
@@ -4132,6 +3976,10 @@
       "fullNode": {
         "title": "Connect Bitcoin full node",
         "desc": "Set up your Bitcoin full node to synchronize and send transactions without using Ledger’s explorers."
+      },
+      "filterTokenOperationsZeroAmount": {
+        "title": "Hide token transactions when value is 0",
+        "desc": "Hiding token transactions without value can prevent some potential address poisoning attacks on Eth, Polygon, BSC, Tron..."
       }
     }
   },
@@ -4204,7 +4052,7 @@
       "tr": "Turkish",
       "ja": "Japanese",
       "ko": "Korean",
-      "pt": "Portuguese"
+      "pt": "Português (Brasil)"
     }
   },
   "theme": {
@@ -5068,9 +4916,6 @@
       "title": "The rewards are smaller than the estimated fees to claim them",
       "description": ""
     },
-    "CompoundLowerAllowanceOfActiveAccountError": {
-      "title": "You cannot reduce the amount approved while having an active deposit."
-    },
     "CosmosBroadcastCodeInternal": {
       "title": "Something went wrong (Error #1)",
       "description": "Please contact Ledger Support"
@@ -5575,7 +5420,7 @@
       "description": "Signature must be applied within 30 seconds. Please try again."
     },
     "TronNotEnoughEnergy": {
-      "title": "Energy is lower than necessary. You might pay up to 20TRX in fees."
+      "title": "Energy is lower than necessary. You might pay up to 50 TRX in fees."
     },
     "PairingFailed": {
       "title": "Pairing unsuccessful",
@@ -5820,6 +5665,10 @@
       "title": "Image loading from file failed",
       "description": "Please try again with another image"
     },
+    "ImageLoadFromNftError": {
+      "title": "Image loading from NFT failed",
+      "description": "Please try again with another NFT"
+    },
     "ImageDownloadError": {
       "title": "Image download failed",
       "description": "Please try again with another image"
@@ -5892,6 +5741,13 @@
       "descriptionWithProductName": "You need to setup your {{ productName }} first.\nWe will guide you through the setup process.",
       "goToOnboardingButton": "Set up my device",
       "goToOnboardingButtonWithProductName": "Set up my {{ productName }}"
+    },
+    "EtherscanAPIError": {
+      "title": "Fetching transactions failed",
+      "description": "An unexpected error occurred with the explorers. Please try again later"
+    },
+    "GasEstimationError": {
+      "title": "Gas estimation failed"
     }
   },
   "cryptoOrg": {
@@ -5925,12 +5781,19 @@
   },
   "customImage": {
     "title": "Custom lock screen",
+    "managerCTA": "Lock screen picture",
     "steps": {
       "choose": {
         "stepLabel": "Choose an image",
         "description": "Choose an image to set as (...)",
         "pickFromNftGallery": "Select from my NFT gallery",
-        "upload": "Upload from my computer"
+        "myNfts": "My NFTs",
+        "upload": "Upload from my computer",
+        "chooseNft": "Choose an NFT",
+        "selectNft": "Choose NFT",
+        "previousSelectNft": "back",
+        "nftEmptyStateTitle": "No NFT's to show yet",
+        "nftEmptyStateDescription": "Get started by adding NFTs to your wallet."
       },
       "adjust": {
         "stepLabel": "Adjust image",
@@ -5956,5 +5819,45 @@
     },
     "customImageSet": "Lockscreen set",
     "finishCTA": "Finish"
+  },
+  "onboardingAppInstall": {
+    "restore": {
+      "title": "Install the same apps as on {{deviceName}}?",
+      "titleNoDeviceName": "Install the same apps as on previous Ledger device?",
+      "subtitle": "You can install or remove apps at anytime.",
+      "installCTA": "Restore applications",
+      "skipCTA": "I'll do this later"
+    },
+    "default": {
+      "title": "{{ productName }} uses apps to enable secure blockchain transactions",
+      "subtitle": "We recommend downloading a default set of apps. You can download more later.",
+      "installCTA": "Install applications",
+      "skipCTA": "I'll do this later"
+    },
+    "progress": {
+      "loading": "Loading ...",
+      "resolving": "Resolving dependencies",
+      "progress": "Stay in Ledger Live while apps are installing.",
+      "disclaimer": "Add or remove apps at any time from Ledger Live.",
+      "skippedInfo": "Some apps aren’t available. They are yet to be developed for {{ productName }}.",
+      "skipped": "Not yet available for {{ productName }}"
+    },
+    "cancelled": {
+      "title": "App installation was cancelled on {{productName}}",
+      "subtitle": "{{productName}} needs blockchain apps to approve your crypto and NFT transactions.",
+      "installCTA": "Install now",
+      "skipCTA": "I'll do this later"
+    },
+    "locked": {
+      "title": "Your {{productName}} is locked",
+      "subtitle": "Unlock your {{productName}} and restart the installation.",
+      "installCTA": "Restart installation"
+    }
+  },
+  "discoverProtect": {
+    "title": "Recover your keys using\nyour identity",
+    "description": "Your Secret Recovery Phrase won't always be within reach.\nSoft launch exclusively for Ledger Nano X. Subscribe for free until 31st May 2023",
+    "cta": "Why should I subscribe?",
+    "downloadLLM": "Subscribe to <purple>Ledger Recover</purple> using the Ledger Live mobile app"
   }
 }

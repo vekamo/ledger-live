@@ -13,10 +13,11 @@ import { useTimeRange } from "../actions/settings";
 import Delta from "./Delta";
 import CurrencyUnitValue from "./CurrencyUnitValue";
 import getWindowDimensions from "../logic/getWindowDimensions";
+import { NoCountervaluePlaceholder } from "./CounterValue";
 import Graph from "./Graph";
-import TransactionsPendingConfirmationWarning from "./TransactionsPendingConfirmationWarning";
+import { TransactionsPendingConfirmationWarningAllAccounts } from "./TransactionsPendingConfirmationWarning";
 import ParentCurrencyIcon from "./ParentCurrencyIcon";
-import FormatDate from "./FormatDate";
+import FormatDate from "./DateFormat/FormatDate";
 import { ensureContrast } from "../colors";
 import { track } from "../analytics";
 import { Item } from "./Graph/types";
@@ -159,9 +160,11 @@ function AssetCentricGraphCard({
                       mt={3}
                       minHeight={25}
                     >
-                      {items[1].value !== undefined ? (
+                      {items[1].value ? (
                         <CurrencyUnitValue {...items[1]} />
-                      ) : null}
+                      ) : (
+                        <NoCountervaluePlaceholder />
+                      )}
                     </Text>
                     <Text
                       fontFamily="Inter"
@@ -174,7 +177,7 @@ function AssetCentricGraphCard({
                       {items[0].value !== undefined ? (
                         <CurrencyUnitValue
                           {...(items[0] as Merge<
-                            typeof items[0],
+                            (typeof items)[0],
                             { value: number }
                           >)}
                         />
@@ -182,7 +185,7 @@ function AssetCentricGraphCard({
                     </Text>
                   </Flex>
                 )}
-                <TransactionsPendingConfirmationWarning />
+                <TransactionsPendingConfirmationWarningAllAccounts />
               </Flex>
               <Flex flexDirection={"row"}>
                 {!balanceHistory ? (

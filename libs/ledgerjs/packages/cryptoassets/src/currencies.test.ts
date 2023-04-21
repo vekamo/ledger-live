@@ -4,11 +4,7 @@ import {
   getFiatCurrencyByTicker,
   hasFiatCurrencyTicker,
 } from "./fiats";
-import {
-  listTokens,
-  findTokenById,
-  findTokenByAddressInCurrency,
-} from "./tokens";
+import { listTokens, findTokenByAddressInCurrency } from "./tokens";
 import {
   listCryptoCurrencies,
   hasCryptoCurrencyId,
@@ -192,11 +188,6 @@ test("tokens are correct", () => {
     expect(typeof unit.name).toBe("string");
     expect(unit.magnitude).toBeGreaterThan(-1);
     expect(typeof unit.magnitude).toBe("number");
-
-    if (token.compoundFor) {
-      const t = findTokenById(token.compoundFor);
-      expect(typeof t).toBe("object");
-    }
   }
 });
 
@@ -318,6 +309,6 @@ test("can register a new coin externally", () => {
       },
     ],
   };
-  registerCryptoCurrency(coinId, mycoin as CryptoCurrency);
+  registerCryptoCurrency(mycoin as CryptoCurrency);
   expect(getCryptoCurrencyById(coinId)).toEqual(mycoin);
 });

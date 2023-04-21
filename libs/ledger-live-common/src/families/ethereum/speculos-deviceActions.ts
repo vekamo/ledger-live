@@ -1,6 +1,10 @@
 import type { DeviceAction } from "../../bot/types";
 import type { Transaction } from "./types";
-import { deviceActionFlow, formatDeviceAmount } from "../../bot/specs";
+import {
+  deviceActionFlow,
+  formatDeviceAmount,
+  SpeculosButton,
+} from "../../bot/specs";
 
 function subAccount(subAccountId, account) {
   const sub = (account.subAccounts || []).find((a) => a.id === subAccountId);
@@ -17,21 +21,19 @@ export const acceptTransaction: DeviceAction<Transaction, any> =
     steps: [
       {
         title: "Review",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
       },
       {
         title: "Type",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
         expectedValue: ({ transaction }) => {
           if (transaction.mode === "erc20.approve") return "Approve";
-          if (transaction.mode === "compound.supply") return "Lend Assets";
-          if (transaction.mode === "compound.withdraw") return "Redeem Assets";
           return "";
         },
       },
       {
         title: "Amount",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
         expectedValue: ({ account, status, transaction }) => {
           const a = transaction.subAccountId
             ? subAccount(transaction.subAccountId, account)
@@ -45,21 +47,7 @@ export const acceptTransaction: DeviceAction<Transaction, any> =
             return "Unlimited " + a.token.ticker;
           }
 
-          const amount =
-            a &&
-            a.compoundBalance &&
-            transaction.mode === "compound.withdraw" &&
-            transaction.useAllAmount
-              ? a.compoundBalance
-              : status.amount;
-
-          if (
-            a &&
-            transaction.mode === "compound.withdraw" &&
-            transaction.useAllAmount
-          ) {
-            return formatDeviceAmount(a.compoundBalance, amount);
-          }
+          const amount = status.amount;
 
           if (a) {
             return formatDeviceAmount(a.token, amount);
@@ -70,35 +58,35 @@ export const acceptTransaction: DeviceAction<Transaction, any> =
       },
       {
         title: "Contract",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
       },
       {
         title: "Network",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
       },
       {
         title: "Max fees",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
         expectedValue: maxFeesExpectedValue,
       },
       {
         // Legacy (ETC..)
         title: "Max Fees",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
         expectedValue: maxFeesExpectedValue,
       },
       {
         title: "Address",
-        button: "Rr",
+        button: SpeculosButton.RIGHT,
         expectedValue: ({ transaction }) => transaction.recipient,
       },
       {
         title: "Accept",
-        button: "LRlr",
+        button: SpeculosButton.BOTH,
       },
       {
         title: "Approve",
-        button: "LRlr",
+        button: SpeculosButton.BOTH,
       },
     ],
   });

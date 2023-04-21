@@ -11,8 +11,8 @@ import {
 import { useTranslation } from "react-i18next";
 import {
   getMainAccount,
-  getAccountUnit,
-  getAccountCurrency,
+  getFeesCurrency,
+  getFeesUnit,
 } from "@ledgerhq/live-common/account/index";
 import { useTheme } from "@react-navigation/native";
 import type { Account, AccountLike, FeeStrategy } from "@ledgerhq/types-live";
@@ -23,7 +23,7 @@ import SummaryRow from "../screens/SendFunds/SummaryRow";
 import CounterValue from "./CounterValue";
 import CurrencyUnitValue from "./CurrencyUnitValue";
 import SectionSeparator from "./SectionSeparator";
-import BottomModal from "./BottomModal";
+import QueuedDrawer from "./QueuedDrawer";
 import Info from "../icons/Info";
 import TachometerSlow from "../icons/TachometerSlow";
 import TachometerMedium from "../icons/TachometerMedium";
@@ -63,8 +63,8 @@ export default function SelectFeesStrategy({
   const { t } = useTranslation();
   const { colors } = useTheme();
   const mainAccount = getMainAccount(account, parentAccount);
-  const currency = getAccountCurrency(mainAccount);
-  const unit = getAccountUnit(mainAccount);
+  const currency = getFeesCurrency(mainAccount);
+  const unit = getFeesUnit(currency);
   const { feesStrategy } = transaction;
   const [isNetworkFeeHelpOpened, setNetworkFeeHelpOpened] = useState(false);
   const toggleNetworkFeeHelpModal = useCallback(
@@ -155,13 +155,13 @@ export default function SelectFeesStrategy({
 
   return (
     <>
-      <BottomModal
-        isOpened={isNetworkFeeHelpOpened}
+      <QueuedDrawer
+        isRequestingToBeOpened={isNetworkFeeHelpOpened}
         preventBackdropClick={false}
         onClose={closeNetworkFeeHelpModal}
       >
         <NetworkFeeInfo />
-      </BottomModal>
+      </QueuedDrawer>
 
       <View>
         <SectionSeparator lineColor={colors.lightFog} />

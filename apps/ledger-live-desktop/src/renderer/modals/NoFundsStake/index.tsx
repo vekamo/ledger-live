@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Icon, Text } from "@ledgerhq/react-ui";
 import { useRampCatalog } from "@ledgerhq/live-common/platform/providers/RampCatalogProvider/index";
 import { getAllSupportedCryptoCurrencyTickers } from "@ledgerhq/live-common/platform/providers/RampCatalogProvider/helpers";
-import { Account, AccountLike } from "~/../../../libs/ledgerjs/packages/types-live/lib";
+import { Account, AccountLike } from "@ledgerhq/types-live";
 import { closeModal, openModal } from "~/renderer/actions/modals";
 import { useProviders } from "~/renderer/screens/exchange/Swap2/Form";
 import Modal, { ModalBody } from "~/renderer/components/Modal";
@@ -13,6 +13,8 @@ import Box from "~/renderer/components/Box";
 import EntryButton from "~/renderer/components/EntryButton/EntryButton";
 import CoinsIcon from "./assets/CoinsIcon";
 import { page, track } from "~/renderer/analytics/segment";
+import { stakeDefaultTrack } from "~/renderer/screens/stake/constants";
+import { CryptoCurrency } from "@ledgerhq/types-cryptoassets";
 
 interface NoFundsStakeModalProps {
   account: AccountLike;
@@ -27,7 +29,7 @@ const NoFundsStakeModal = ({ account, parentAccount }: NoFundsStakeModalProps) =
   const rampCatalog = useRampCatalog();
   const { providers, storedProviders } = useProviders();
 
-  const onRampAvailableTickers = useMemo(() => {
+  const onRampAvailableTickers: string[] = useMemo(() => {
     if (!rampCatalog.value) {
       return [];
     }
@@ -42,7 +44,7 @@ const NoFundsStakeModal = ({ account, parentAccount }: NoFundsStakeModalProps) =
       : [];
   }, [providers, storedProviders]);
 
-  const currency = parentAccount?.currency || account.currency;
+  const currency: CryptoCurrency = parentAccount?.currency || account.currency;
   const availableOnBuy = currency && onRampAvailableTickers.includes(currency.ticker.toUpperCase());
   const availableOnSwap = useMemo(() => {
     return currency && swapAvailableIds.includes(currency.id);
@@ -56,6 +58,7 @@ const NoFundsStakeModal = ({ account, parentAccount }: NoFundsStakeModalProps) =
     track("button_clicked", {
       button: "buy",
       page: history.location.pathname,
+      ...stakeDefaultTrack,
     });
 
     dispatch(closeModal(modalName));
@@ -73,6 +76,7 @@ const NoFundsStakeModal = ({ account, parentAccount }: NoFundsStakeModalProps) =
     track("button_clicked", {
       button: "swap",
       page: history.location.pathname,
+      ...stakeDefaultTrack,
     });
 
     dispatch(closeModal(modalName));
@@ -91,6 +95,7 @@ const NoFundsStakeModal = ({ account, parentAccount }: NoFundsStakeModalProps) =
     track("button_clicked", {
       button: "receive",
       page: history.location.pathname,
+      ...stakeDefaultTrack,
     });
 
     dispatch(closeModal(modalName));

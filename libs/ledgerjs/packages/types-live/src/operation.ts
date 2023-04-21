@@ -31,9 +31,7 @@ export type OperationType =
   | "SLASH"
   | "NOMINATE"
   | "CHILL"
-  // COMPOUND TYPE OPERATIONS
-  | "SUPPLY"
-  | "REDEEM"
+  // ETHEREUM
   | "APPROVE"
   // ALGORAND
   | "OPT_IN"
