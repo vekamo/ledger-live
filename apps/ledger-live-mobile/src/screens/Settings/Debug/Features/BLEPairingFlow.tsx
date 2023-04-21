@@ -28,7 +28,7 @@ const availableDeviceModelFilter = [
   DeviceModelId.nanoX,
   DeviceModelId.stax,
 ] as const;
-type AvailableDeviceModelFilter = (typeof availableDeviceModelFilter)[number];
+type AvailableDeviceModelFilter = typeof availableDeviceModelFilter[number];
 
 export default () => {
   const [isDrawerOpen, setIsDrawerOpen] = useState<boolean>(false);

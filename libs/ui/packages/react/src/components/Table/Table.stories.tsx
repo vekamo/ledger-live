@@ -187,7 +187,7 @@ const data = new Array(12).fill(0).map((_, idx) => ({
 
 // We have 4 columns here.
 const NB_OF_COLUMNS = 4;
-const columns: Column<(typeof data)[0]>[] = Array(NB_OF_COLUMNS)
+const columns: Column<typeof data[0]>[] = Array(NB_OF_COLUMNS)
   .fill(0)
   .map((_, idx) => ({
     // The header will be a letter based on the column (A / B / C / D).
@@ -204,7 +204,7 @@ const columns: Column<(typeof data)[0]>[] = Array(NB_OF_COLUMNS)
     ),
   }));
 
-export const Default: StoryTemplate<Props<(typeof data)[0]>> = (args) => {
+export const Default: StoryTemplate<Props<typeof data[0]>> = (args) => {
   return <Table {...args} data={data} columns={columns} />;
 };
 

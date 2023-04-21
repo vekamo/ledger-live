@@ -1,7 +1,7 @@
 "use strict";
 import "../../__tests__/test-helpers/environment";
 import fs from "fs/promises";
-import { mkdirp } from "mkdirp";
+import mkdirp from "mkdirp";
 import path from "path";
 import { promiseAllBatched } from "../../promise";
 import { exec, spawn } from "child_process";

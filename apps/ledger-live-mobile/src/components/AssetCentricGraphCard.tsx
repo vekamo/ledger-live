@@ -177,7 +177,7 @@ function AssetCentricGraphCard({
                       {items[0].value !== undefined ? (
                         <CurrencyUnitValue
                           {...(items[0] as Merge<
-                            (typeof items)[0],
+                            typeof items[0],
                             { value: number }
                           >)}
                         />

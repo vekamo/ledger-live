@@ -26,7 +26,7 @@ import { UnionToIntersection } from "../types/helpers";
 import { BaseNavigation } from "./RootNavigator/types/helpers";
 
 type FamilyOperationDetailsIntersection = UnionToIntersection<
-  (typeof perFamilyOperationDetails)[keyof typeof perFamilyOperationDetails]
+  typeof perFamilyOperationDetails[keyof typeof perFamilyOperationDetails]
 >;
 
 const ContainerTouchable = styled(Flex).attrs(_ => ({

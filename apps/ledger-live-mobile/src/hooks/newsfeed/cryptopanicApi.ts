@@ -10,7 +10,7 @@ export const cryptopanicAvailableRegions = [
 ] as const;
 
 export type CryptopanicAvailableRegionsType =
-  (typeof cryptopanicAvailableRegions)[number];
+  typeof cryptopanicAvailableRegions[number];
 
 export type CryptopanicNews = {
   kind: "news";

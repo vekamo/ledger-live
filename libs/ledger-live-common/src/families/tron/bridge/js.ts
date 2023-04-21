@@ -671,9 +671,9 @@ const getTransactionStatus = async (
       } else {
         errors.resource = new TronNoFrozenForEnergy();
       }
-    } else if (now.getTime() < (expirationDate as Date).getTime()) {
+    } else if (now.getTime() < expirationDate.getTime()) {
       errors.resource = new TronUnfreezeNotExpired(undefined, {
-        until: (expirationDate as Date).toISOString(),
+        until: expirationDate.toISOString(),
       });
     }
   }

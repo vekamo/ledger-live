@@ -126,8 +126,8 @@ export default function Content({
     operation,
     mainAccount,
   );
-  const uniqueSenders = uniq<(typeof operation.senders)[0]>(operation.senders);
-  const uniqueRecipients = uniq<(typeof operation.recipients)[0]>(
+  const uniqueSenders = uniq<typeof operation.senders[0]>(operation.senders);
+  const uniqueRecipients = uniq<typeof operation.recipients[0]>(
     operation.recipients,
   );
   const { extra, type } = operation;
