@@ -4,13 +4,13 @@ import { useTheme } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { ScreenName } from "../../const";
 import Scanner from "../../components/Scanner";
-import HeaderRightClose from "../../components/HeaderRightClose";
+import { NavigationHeaderCloseButtonAdvanced } from "../../components/NavigationHeaderCloseButton";
 import TransparentHeaderNavigationOptions from "../../navigation/TransparentHeaderNavigationOptions";
 import { BaseNavigation } from "../../components/RootNavigator/types/helpers";
 
 const HeaderRight = () => {
   const { colors } = useTheme();
-  return <HeaderRightClose color={colors.white} preferDismiss={false} />;
+  return <NavigationHeaderCloseButtonAdvanced color={colors.white} preferDismiss={false} />;
 };
 
 type Props = {

@@ -74,7 +74,7 @@ import DeviceAction from "../../components/DeviceAction";
 import logger from "../../logger";
 import ValidateError from "../../components/ValidateError";
 import SkipLock from "../../components/behaviour/SkipLock";
-import HeaderRightClose from "../../components/HeaderRightClose";
+import { NavigationHeaderCloseButtonAdvanced } from "../../components/NavigationHeaderCloseButton";
 import ValidateReceiveOnDevice from "./ValidateReceiveOnDevice";
 import ValidateReceiveSuccess from "./ValidateReceiveSuccess";
 import {
@@ -613,7 +613,7 @@ function ReceiveConfirmationInner({
             }
           />
         ),
-        headerRight: () => <HeaderRightClose />,
+        headerRight: () => <NavigationHeaderCloseButtonAdvanced />,
         headerTitle: () => (
           <StepHeader
             subtitle={t("transfer.receive.stepperHeader.range", {
