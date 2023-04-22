@@ -9,7 +9,7 @@ import type { Account, TokenAccount } from "@ledgerhq/types-live";
 import { Currency } from "@ledgerhq/types-cryptoassets";
 import { getCurrencyBridge } from "@ledgerhq/live-common/bridge/index";
 
-import { Flex, InfiniteLoader, Log } from "@ledgerhq/native-ui";
+import { Flex, InfiniteLoader } from "@ledgerhq/native-ui";
 import { makeEmptyTokenAccount } from "@ledgerhq/live-common/account/index";
 import type { Device } from "@ledgerhq/live-common/hw/actions/types";
 import styled from "styled-components/native";
@@ -36,6 +36,7 @@ import Animation from "../../components/Animation";
 import { getDeviceAnimation } from "../../helpers/getDeviceAnimation";
 import SkipLock from "../../components/behaviour/SkipLock";
 import QueuedDrawer from "../../components/QueuedDrawer";
+import { TitleText } from "../../components/DeviceAction/rendering";
 
 const DeviceActionContainer = styled(Flex).attrs({
   flexDirection: "row",
@@ -65,26 +66,6 @@ const AnimationContainer = styled(Flex).attrs(
   }),
 )<AnimationContainerExtraProps>``;
 
-const TitleContainer = styled(Flex).attrs({
-  py: 8,
-})``;
-
-const TitleText = ({
-  children,
-  disableUppercase,
-}: {
-  children: React.ReactNode;
-  disableUppercase?: boolean;
-}) => (
-  <TitleContainer>
-    <Log
-      extraTextProps={disableUppercase ? { textTransform: "none" } : undefined}
-    >
-      {children}
-    </Log>
-  </TitleContainer>
-);
-
 const ApproveExportRootPublicKeyOnDevice = ({
   device,
   accountIndex,
@@ -101,6 +82,7 @@ const ApproveExportRootPublicKeyOnDevice = ({
         <Wrapper>
           <AnimationContainer
             marginTop="16px"
+            marginBottom="16px"
             withVerifyAddressHeight={device.modelId !== "blue"}
           >
             <Animation

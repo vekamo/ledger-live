@@ -10,7 +10,7 @@ import { Device } from "@ledgerhq/live-common/hw/actions/types";
 import { getDeviceModel } from "@ledgerhq/devices";
 import { useTheme } from "@react-navigation/native";
 import styled from "styled-components/native";
-import { Flex, Log } from "@ledgerhq/native-ui";
+import { Flex } from "@ledgerhq/native-ui";
 import { BigNumber } from "bignumber.js";
 import Alert from "../../components/Alert";
 import {
@@ -19,6 +19,7 @@ import {
 } from "../../components/ValidateOnDeviceDataRow";
 import Animation from "../../components/Animation";
 import { getDeviceAnimation } from "../../helpers/getDeviceAnimation";
+import { TitleText } from "../../components/DeviceAction/rendering";
 
 function AmountField({
   account,
@@ -83,7 +84,10 @@ export default function ValidateReceiveOnDevice({
   const { t } = useTranslation();
   return (
     <RootContainer>
-      <ScrollContainer>
+      <ScrollContainer contentContainerStyle={{
+          flexGrow: 1,
+          justifyContent: "center",
+        }}>
         <InnerContainer>
           <AnimationContainer>
             <Animation
@@ -153,20 +157,10 @@ const FooterContainer = styled(Flex).attrs({
 })``;
 
 const AnimationContainer = styled(Flex).attrs({
-  marginBottom: 40,
+  marginTop: 5,
+  marginBottom: 35,
 })``;
 
 const ScrollContainer = styled(ScrollView)`
   flex: 1;
-  padding: 16px;
 `;
-
-const TitleContainer = styled(Flex).attrs({
-  py: 8,
-})``;
-
-const TitleText = ({ children }: { children: React.ReactNode }) => (
-  <TitleContainer>
-    <Log>{children}</Log>
-  </TitleContainer>
-);

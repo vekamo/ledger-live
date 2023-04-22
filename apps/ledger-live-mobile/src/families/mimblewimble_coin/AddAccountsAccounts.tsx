@@ -26,7 +26,7 @@ import { getCurrencyBridge } from "@ledgerhq/live-common/bridge/index";
 import { isTokenCurrency } from "@ledgerhq/live-common/currencies/index";
 import type { DerivationMode } from "@ledgerhq/coin-framework/derivation";
 import { useTheme } from "@react-navigation/native";
-import { Flex, Log } from "@ledgerhq/native-ui";
+import { Flex } from "@ledgerhq/native-ui";
 import styled from "styled-components/native";
 import type { Device } from "@ledgerhq/live-common/hw/actions/types";
 import { replaceAccounts } from "../../actions/accounts";
@@ -65,6 +65,7 @@ import { BaseNavigatorStackParamList } from "../../components/RootNavigator/type
 import { getDeviceAnimation } from "../../helpers/getDeviceAnimation";
 import Animation from "../../components/Animation";
 import SkipLock from "../../components/behaviour/SkipLock";
+import { TitleText } from "../../components/DeviceAction/rendering";
 
 const DeviceActionContainer = styled(Flex).attrs({
   flexDirection: "row",
@@ -93,26 +94,6 @@ const AnimationContainer = styled(Flex).attrs(
       : undefined,
   }),
 )<AnimationContainerExtraProps>``;
-
-const TitleContainer = styled(Flex).attrs({
-  py: 8,
-})``;
-
-const TitleText = ({
-  children,
-  disableUppercase,
-}: {
-  children: React.ReactNode;
-  disableUppercase?: boolean;
-}) => (
-  <TitleContainer>
-    <Log
-      extraTextProps={disableUppercase ? { textTransform: "none" } : undefined}
-    >
-      {children}
-    </Log>
-  </TitleContainer>
-);
 
 const SectionAccounts = ({
   defaultSelected,
@@ -144,6 +125,7 @@ const ApproveExportRootPublicKeyOnDevice = ({
         <Wrapper>
           <AnimationContainer
             marginTop="16px"
+            marginBottom="16px"
             withVerifyAddressHeight={device.modelId !== "blue"}
           >
             <Animation
