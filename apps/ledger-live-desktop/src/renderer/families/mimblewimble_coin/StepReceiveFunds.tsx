@@ -296,6 +296,7 @@ class StepReceiveFunds extends PureComponent<Props, State> {
     const mainAccount = getMainAccount(account, parentAccount);
     if (!previousState.currentDevice && currentDevice) {
       this.unsubscribe();
+      let transactionResponseReceived = false;
       this.processTransactionSubscription = getTransactionResponse(
         toAccountRaw(mainAccount),
         currentDevice.deviceId,
@@ -331,6 +332,7 @@ class StepReceiveFunds extends PureComponent<Props, State> {
               });
               break;
             case "signed":
+              transactionResponseReceived = true;
               qrcode.toString(
                 transactionResponse,
                 {
@@ -361,11 +363,13 @@ class StepReceiveFunds extends PureComponent<Props, State> {
           }
         },
         error: (error: Error) => {
-          this.updateState({
-            processingTransactionError: error,
-            currentDevice: null,
-          });
-          onChangeAddressVerified(true, error);
+          if (!transactionResponseReceived) {
+            this.updateState({
+              processingTransactionError: error,
+              currentDevice: null,
+            });
+            onChangeAddressVerified(true, error);
+          }
         },
       });
     } else if (previousState.currentDevice && !currentDevice) {

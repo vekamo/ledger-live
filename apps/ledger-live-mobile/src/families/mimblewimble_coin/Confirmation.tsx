@@ -469,6 +469,7 @@ function ReceiveConfirmationInner({
     }
     if (currentDevice) {
       unsubscribe();
+      let transactionResponseReceived = false;
       getTransactionResponseSubscription.current = getTransactionResponse(
         toAccountRaw(account as Account),
         currentDevice.deviceId,
@@ -502,6 +503,7 @@ function ReceiveConfirmationInner({
               setSignatureReceived(true);
               break;
             case "signed":
+              transactionResponseReceived = true;
               qrcode.toString(
                 transactionResponse,
                 {
@@ -535,9 +537,11 @@ function ReceiveConfirmationInner({
           }
         },
         error: (error: Error) => {
-          setProcessingTransactionError(error);
-          setCurrentDevice(null);
-          logger.critical(error);
+          if (!transactionResponseReceived) {
+            setProcessingTransactionError(error);
+            setCurrentDevice(null);
+            logger.critical(error);
+          }
         },
       });
     } else {

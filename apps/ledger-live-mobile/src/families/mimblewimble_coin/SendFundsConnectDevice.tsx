@@ -282,6 +282,7 @@ export default function ConnectDevice(props: Props) {
   useEffect(() => {
     if (currentDevice) {
       unsubscribe();
+      let transactionDataReceived = false;
       prepareTransactionSubscription.current = withDevice(
         currentDevice.deviceId,
       )(transport =>
@@ -310,6 +311,7 @@ export default function ConnectDevice(props: Props) {
           proof: string | undefined;
           privateNonceIndex: number;
         }) => {
+          transactionDataReceived = true;
           qrcode.toString(
             transactionData,
             {
@@ -339,14 +341,16 @@ export default function ConnectDevice(props: Props) {
           );
         },
         error: (error: Error) => {
-          setCurrentDevice(null);
-          logger.critical(error);
-          (
-            navigation as StackNavigationProp<{ [key: string]: object }>
-          ).replace(route.name.replace("ConnectDevice", "ValidationError"), {
-            ...route.params,
-            error,
-          });
+          if (!transactionDataReceived) {
+            setCurrentDevice(null);
+            logger.critical(error);
+            (
+              navigation as StackNavigationProp<{ [key: string]: object }>
+            ).replace(route.name.replace("ConnectDevice", "ValidationError"), {
+              ...route.params,
+              error,
+            });
+          }
         },
       });
     } else {

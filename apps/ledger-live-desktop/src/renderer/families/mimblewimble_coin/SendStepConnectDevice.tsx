@@ -124,6 +124,7 @@ class StepConnectDevice extends PureComponent<Props, State> {
     const mainAccount = getMainAccount(account, parentAccount);
     if (!previousState.currentDevice && currentDevice) {
       this.unsubscribe();
+      let transactionDataReceived = false;
       this.prepareTransactionSubscription = withDevice(currentDevice.deviceId)(transport =>
         from(
           prepareTransaction(toAccountRaw(mainAccount), transport, toTransactionRaw(transaction)),
@@ -144,6 +145,7 @@ class StepConnectDevice extends PureComponent<Props, State> {
           proof: string | undefined;
           privateNonceIndex: number;
         }) => {
+          transactionDataReceived = true;
           qrcode.toString(
             transactionData,
             {
@@ -171,15 +173,17 @@ class StepConnectDevice extends PureComponent<Props, State> {
           );
         },
         error: (error: Error) => {
-          this.updateState({
-            currentDevice: null,
-          });
-          if (!onFailHandler) {
-            onTransactionError(error);
-            transitionTo("confirmation");
-          } else {
-            closeModal();
-            onFailHandler(error);
+          if (!transactionDataReceived) {
+            this.updateState({
+              currentDevice: null,
+            });
+            if (!onFailHandler) {
+              onTransactionError(error);
+              transitionTo("confirmation");
+            } else {
+              closeModal();
+              onFailHandler(error);
+            }
           }
         },
       });
