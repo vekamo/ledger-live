@@ -126,7 +126,11 @@
       "react-native-image-crop-tools@1.6.4": "patches/react-native-image-crop-tools@1.6.4.patch",
       "socks-proxy-agent@7.0.0": "patches/socks-proxy-agent@7.0.0.patch",
       "react-native-aes-crypto@2.1.1": "patches/react-native-aes-crypto@2.1.1.patch",
-      "react-native-webview@11.26.1": "patches/react-native-webview@11.26.1.patch"
+      "react-native-webview@11.26.1": "patches/react-native-webview@11.26.1.patch",
+      "@nicolasflamel/smaz-wasm@0.0.31": "patches/@nicolasflamel__smaz-wasm@0.0.31.patch",
+      "@nicolasflamel/ed25519-wasm@0.0.22": "patches/@nicolasflamel__ed25519-wasm@0.0.22.patch",
+      "@nicolasflamel/x25519-wasm@0.0.23": "patches/@nicolasflamel__x25519-wasm@0.0.23.patch",
+      "@nicolasflamel/secp256k1-zkp-wasm@0.0.29": "patches/@nicolasflamel__secp256k1-zkp-wasm@0.0.29.patch"
     }
   }
 }

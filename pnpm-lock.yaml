@@ -6,6 +6,18 @@ overrides:
   remove-flow-types-loader>loader-utils: '*'
 
 patchedDependencies:
+  '@nicolasflamel/ed25519-wasm@0.0.22':
+    hash: u4k4l6fgiail4o7redeclgl5ge
+    path: patches/@nicolasflamel__ed25519-wasm@0.0.22.patch
+  '@nicolasflamel/secp256k1-zkp-wasm@0.0.29':
+    hash: it6dsn6axuz4dzacladdskp7zm
+    path: patches/@nicolasflamel__secp256k1-zkp-wasm@0.0.29.patch
+  '@nicolasflamel/smaz-wasm@0.0.31':
+    hash: 4e7etoj5xnuln4cqtym2e5wtsm
+    path: patches/@nicolasflamel__smaz-wasm@0.0.31.patch
+  '@nicolasflamel/x25519-wasm@0.0.23':
+    hash: xlogqfaujlos7frc5omc7f4hzq
+    path: patches/@nicolasflamel__x25519-wasm@0.0.23.patch
   react-native-aes-crypto@2.1.1:
     hash: lozwnsft4qikf7edvar55jcfiy
     path: patches/react-native-aes-crypto@2.1.1.patch
@@ -15064,14 +15076,15 @@ packages:
       react-native: 0.71.6(@babel/core@7.21.0)(@babel/preset-env@7.17.10)(metro-resolver@0.76.0)(metro-transform-worker@0.76.0)(react@18.0.0)
     dev: false
 
-  /@nicolasflamel/ed25519-wasm@0.0.22:
+  /@nicolasflamel/ed25519-wasm@0.0.22(patch_hash=u4k4l6fgiail4o7redeclgl5ge):
     resolution: {integrity: sha512-iiOCCUnYSrVa2t+9i8Vumi0zZtmPqQvIvCrYEMcAE9J3vshCSn2XSpf2qW4qAGYBx+F3EhkgKWWGtapqJwkMTw==}
     dev: false
+    patched: true
 
   /@nicolasflamel/ed25519@0.0.5(react-native@0.71.6)(react@17.0.2):
     resolution: {integrity: sha512-kliJFZTB6tZhgSOwDIId4qpPYB1VC/aOTLLercTMMC/fYAIgPRoa50DwAJtOOtS34XZmIsQcnCZnWdoyHLGaMA==}
     dependencies:
-      '@nicolasflamel/ed25519-wasm': 0.0.22
+      '@nicolasflamel/ed25519-wasm': 0.0.22(patch_hash=u4k4l6fgiail4o7redeclgl5ge)
     optionalDependencies:
       '@nicolasflamel/ed25519-native': 0.0.19
       '@nicolasflamel/ed25519-react': 0.0.9(react-native@0.71.6)(react@17.0.2)
@@ -15109,14 +15122,15 @@ packages:
       react-native: 0.71.6(@babel/core@7.21.0)(@babel/preset-env@7.17.10)(metro-resolver@0.76.0)(metro-transform-worker@0.76.0)(react@18.0.0)
     dev: false
 
-  /@nicolasflamel/secp256k1-zkp-wasm@0.0.29:
+  /@nicolasflamel/secp256k1-zkp-wasm@0.0.29(patch_hash=it6dsn6axuz4dzacladdskp7zm):
     resolution: {integrity: sha512-SfR6YHTzRAKj+w6rRP9fBLZh+nYeVthaxNRENjpxJpwYP9mije9uIxVXY+wym/gwClBLtG8+DU+ZvNkc1Bh12A==}
     dev: false
+    patched: true
 
   /@nicolasflamel/secp256k1-zkp@0.0.15(react-native@0.71.6)(react@17.0.2):
     resolution: {integrity: sha512-ukZ9qAz/lnl9BIz9CypRr+n88Gtz7GbOpFJu6rWU6btyG7OpxCMTDv7yW1ngw2wcsIhq5Rg8pPcgvqyUXD7RHg==}
     dependencies:
-      '@nicolasflamel/secp256k1-zkp-wasm': 0.0.29
+      '@nicolasflamel/secp256k1-zkp-wasm': 0.0.29(patch_hash=it6dsn6axuz4dzacladdskp7zm)
     optionalDependencies:
       '@nicolasflamel/secp256k1-zkp-native': 0.0.25
       '@nicolasflamel/secp256k1-zkp-react': 0.0.13(react-native@0.71.6)(react@17.0.2)
@@ -15154,14 +15168,15 @@ packages:
       react-native: 0.71.6(@babel/core@7.21.0)(@babel/preset-env@7.17.10)(metro-resolver@0.76.0)(metro-transform-worker@0.76.0)(react@18.0.0)
     dev: false
 
-  /@nicolasflamel/smaz-wasm@0.0.31:
+  /@nicolasflamel/smaz-wasm@0.0.31(patch_hash=4e7etoj5xnuln4cqtym2e5wtsm):
     resolution: {integrity: sha512-ZDZozdgXsEcXJFKUCIgdHOyLDIVfSmH1/HBqk28WzVU2wq+fHbC4BdB7DDMIfFzTr+30syL3PBq+WFdG1mQYFg==}
     dev: false
+    patched: true
 
   /@nicolasflamel/smaz@0.0.7(react-native@0.71.6)(react@17.0.2):
     resolution: {integrity: sha512-9kkZhskF7o06w4DZo4Qm3YfLlFZFmjQXlqQDZzRn6Xj6edQ1Wa4BZLgGwC9t+DSITzP9g6cNhP+yLEw0vRiUzQ==}
     dependencies:
-      '@nicolasflamel/smaz-wasm': 0.0.31
+      '@nicolasflamel/smaz-wasm': 0.0.31(patch_hash=4e7etoj5xnuln4cqtym2e5wtsm)
     optionalDependencies:
       '@nicolasflamel/smaz-native': 0.0.27
       '@nicolasflamel/smaz-react': 0.0.12(react-native@0.71.6)(react@17.0.2)
@@ -15199,14 +15214,15 @@ packages:
       react-native: 0.71.6(@babel/core@7.21.0)(@babel/preset-env@7.17.10)(metro-resolver@0.76.0)(metro-transform-worker@0.76.0)(react@18.0.0)
     dev: false
 
-  /@nicolasflamel/x25519-wasm@0.0.23:
+  /@nicolasflamel/x25519-wasm@0.0.23(patch_hash=xlogqfaujlos7frc5omc7f4hzq):
     resolution: {integrity: sha512-t1arLhWPWVe9Tg5OwYHhuLSf64Cb0HKteObBVd7u/Ggb+io+RCzMy0GBInJyEeppihewn6p96OmqIQCxX1jREg==}
     dev: false
+    patched: true
 
   /@nicolasflamel/x25519@0.0.4(react-native@0.71.6)(react@17.0.2):
     resolution: {integrity: sha512-59sI3wuBXpfGOoqP2vmH1l1rQ640P0iFVR3O2TiAQ1Y61bn4lVeVjQ2iuaCpHBQ+Zo3qxNzLgtTrVHvOIQpIuw==}
     dependencies:
-      '@nicolasflamel/x25519-wasm': 0.0.23
+      '@nicolasflamel/x25519-wasm': 0.0.23(patch_hash=xlogqfaujlos7frc5omc7f4hzq)
     optionalDependencies:
       '@nicolasflamel/x25519-native': 0.0.20
       '@nicolasflamel/x25519-react': 0.0.9(react-native@0.71.6)(react@17.0.2)

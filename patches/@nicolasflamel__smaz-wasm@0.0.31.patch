@@ -1,0 +1,10 @@
+diff --git a/dist/index.js b/dist/index.js
+index a32b8520503a248533b8d1549709d89f2e836f44..000104b5fad84c98629882fa00ec11cfda64f982 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -1,4 +1,4 @@
+-"use strict"; const smaz = (typeof WebAssembly !== "undefined") ? require("./wasm.js") : require("./asm.js");
++"use strict"; const smaz = (typeof WebAssembly !== "undefined" && false) ? require("./wasm.js") : require("./asm.js");
+ // Use strict
+ "use strict";
+ 
