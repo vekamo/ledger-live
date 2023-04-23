@@ -301,7 +301,8 @@ class StepImport extends PureComponent<
         : [preferredNewAccountScheme!],
     });
     let creatable;
-    const NoAssociatedAccounts = byFamilyNoAssociatedAccounts[mainCurrency.family as keyof typeof byFamily];
+    const NoAssociatedAccounts =
+      byFamilyNoAssociatedAccounts[mainCurrency.family as keyof typeof byFamily];
     if (alreadyEmptyAccount) {
       creatable = (
         <Trans i18nKey="addAccounts.createNewAccount.noOperationOnLastAccount" parent="div">

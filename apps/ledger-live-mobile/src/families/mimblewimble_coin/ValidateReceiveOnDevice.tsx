@@ -84,10 +84,12 @@ export default function ValidateReceiveOnDevice({
   const { t } = useTranslation();
   return (
     <RootContainer>
-      <ScrollContainer contentContainerStyle={{
+      <ScrollContainer
+        contentContainerStyle={{
           flexGrow: 1,
           justifyContent: "center",
-        }}>
+        }}
+      >
         <InnerContainer>
           <AnimationContainer>
             <Animation

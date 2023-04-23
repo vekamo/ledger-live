@@ -690,7 +690,7 @@ class StepReceiveFunds extends PureComponent<Props, State> {
   }
 }
 
-interface FooterState extends State {
+export interface FooterState extends State {
   stepReceiveFunds: StepReceiveFunds | undefined;
 }
 

@@ -13,7 +13,12 @@ import { BaseNavigation } from "../../components/RootNavigator/types/helpers";
 
 const HeaderRight = () => {
   const { colors } = useTheme();
-  return <NavigationHeaderCloseButtonAdvanced color={colors.white} preferDismiss={false} />;
+  return (
+    <NavigationHeaderCloseButtonAdvanced
+      color={colors.white}
+      preferDismiss={false}
+    />
+  );
 };
 
 type Props = {
