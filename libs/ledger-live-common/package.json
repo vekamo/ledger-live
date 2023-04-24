@@ -157,7 +157,7 @@
     "@ledgerhq/wallet-api-core": "^0.16.0",
     "@ledgerhq/wallet-api-server": "^0.13.2",
     "@nicolasflamel/ed25519": "^0.0.5",
-    "@nicolasflamel/secp256k1-zkp": "^0.0.15",
+    "@nicolasflamel/secp256k1-zkp": "^0.0.16",
     "@nicolasflamel/smaz": "^0.0.7",
     "@nicolasflamel/x25519": "^0.0.4",
     "@solana/spl-token": "^0.2.0",
