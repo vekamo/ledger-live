@@ -107,4 +107,5 @@ const OperationDetailsExtra = ({
 
 export default {
   OperationDetailsExtra,
+  operationDetailsExtraIncludesLineBreak: true,
 };

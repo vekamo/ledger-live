@@ -186,6 +186,10 @@ const OperationD: React.ComponentType<Props> = (props: Props) => {
     specific && "OperationDetailsExtra" in specific && specific.OperationDetailsExtra
       ? specific.OperationDetailsExtra
       : OperationDetailsExtra;
+  const opDetailsExtraIncludesLineBreak =
+    specific &&
+    "operationDetailsExtraIncludesLineBreak" in specific &&
+    specific.operationDetailsExtraIncludesLineBreak;
   const { hasFailed } = operation;
   const subOperations = operation.subOperations || [];
   const internalOperations = operation.internalOperations || [];
@@ -634,12 +638,15 @@ const OperationD: React.ComponentType<Props> = (props: Props) => {
       ) : null}
       {hash || uniqueSenders.length || recipients.length ? <B /> : null}
       {OpDetailsExtra && (
-        <OpDetailsExtra
-          operation={operation}
-          extra={extra}
-          type={type}
-          account={account as Account}
-        />
+        <>
+          <OpDetailsExtra
+            operation={operation}
+            extra={extra}
+            type={type}
+            account={account as Account}
+          />
+          {opDetailsExtraIncludesLineBreak ? null : <B />}
+        </>
       )}
     </Box>
   );
