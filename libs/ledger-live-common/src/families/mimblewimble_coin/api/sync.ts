@@ -37,31 +37,38 @@ export default class Sync {
   }> {
     let balanceChange: BigNumber = new BigNumber(0);
     let spendableBalanceChange: BigNumber = new BigNumber(0);
+    const tempRecentHeights: RecentHeight[] = recentHeights.map(
+      (recentHeight: RecentHeight): RecentHeight => {
+        return {
+          ...recentHeight,
+        };
+      }
+    );
     const { tipHeight, tipHash } = await Node.getTip(cryptocurrency);
     if (
       !tipHeight.isZero() &&
-      (!recentHeights.length ||
-        tipHeight.isGreaterThanOrEqualTo(recentHeights[0].height))
+      (!tempRecentHeights.length ||
+        tipHeight.isGreaterThanOrEqualTo(tempRecentHeights[0].height))
     ) {
       if (
-        recentHeights.length &&
-        (!recentHeights[0].height.isEqualTo(tipHeight) ||
-          !recentHeights[0].hash.equals(tipHash))
+        tempRecentHeights.length &&
+        (!tempRecentHeights[0].height.isEqualTo(tipHeight) ||
+          !tempRecentHeights[0].hash.equals(tipHash))
       ) {
-        while (recentHeights.length) {
+        while (tempRecentHeights.length) {
           const { hash } = await Node.getHeader(
             cryptocurrency,
-            recentHeights[0].height
+            tempRecentHeights[0].height
           );
-          if (recentHeights[0].hash.equals(hash)) {
+          if (tempRecentHeights[0].hash.equals(hash)) {
             break;
           }
-          recentHeights.shift();
+          tempRecentHeights.shift();
         }
       }
       const startHeight = BigNumber.minimum(
-        recentHeights.length
-          ? recentHeights[0].height.plus(1)
+        tempRecentHeights.length
+          ? tempRecentHeights[0].height.plus(1)
           : Consensus.getHardwareWalletStartingHeight(cryptocurrency),
         accountHeight.plus(1)
       );
@@ -255,34 +262,44 @@ export default class Sync {
           highestIdentifier && highestIdentifier.includesValue(nextIdentifier)
             ? highestIdentifier.getNext()
             : nextIdentifier;
-        for (let i: number = operations.length - 1; i >= 0; --i) {
+        const tempOperations: Operation[] = operations.map(
+          (operation: Operation): Operation => {
+            return {
+              ...operation,
+              extra: {
+                ...operation.extra,
+              },
+            };
+          }
+        );
+        for (let i: number = tempOperations.length - 1; i >= 0; --i) {
           if (
-            operations[i].type !== "OUT" &&
-            operations[i].blockHeight !== null &&
-            !operations[i].extra.spent &&
-            startHeight.isGreaterThan(operations[i].blockHeight!)
+            tempOperations[i].type !== "OUT" &&
+            tempOperations[i].blockHeight !== null &&
+            !tempOperations[i].extra.spent &&
+            startHeight.isGreaterThan(tempOperations[i].blockHeight!)
           ) {
             const { height } = await Node.getOutput(
               cryptocurrency,
-              operations[i].extra.outputCommitment
+              tempOperations[i].extra.outputCommitment
             );
-            if (height && height.isEqualTo(operations[i].blockHeight!)) {
+            if (height && height.isEqualTo(tempOperations[i].blockHeight!)) {
               break;
             } else {
-              balanceChange = balanceChange.minus(operations[i].value);
+              balanceChange = balanceChange.minus(tempOperations[i].value);
               if (
-                operations[i].type !== "COINBASE_REWARD" ||
+                tempOperations[i].type !== "COINBASE_REWARD" ||
                 accountHeight.isGreaterThanOrEqualTo(
-                  new BigNumber(operations[i].blockHeight!)
+                  new BigNumber(tempOperations[i].blockHeight!)
                     .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                     .minus(1)
                 )
               ) {
                 spendableBalanceChange = spendableBalanceChange.minus(
-                  operations[i].value
+                  tempOperations[i].value
                 );
               }
-              operations[i].extra.spent = true;
+              tempOperations[i].extra.spent = true;
             }
           }
         }
@@ -307,64 +324,70 @@ export default class Sync {
             checkedOperations[newOperations[i].id] = newOperations[i];
           }
         }
-        for (let i = 0; i < operations.length; ++i) {
-          if (operations[i].id in checkedOperations) {
+        for (let i = 0; i < tempOperations.length; ++i) {
+          if (tempOperations[i].id in checkedOperations) {
             if (
-              operations[i].blockHeight !== null ||
-              operations[i].extra.spent
+              tempOperations[i].blockHeight !== null ||
+              tempOperations[i].extra.spent
             ) {
-              balanceChange = balanceChange.minus(operations[i].value);
+              balanceChange = balanceChange.minus(tempOperations[i].value);
               if (
-                operations[i].extra.spent ||
-                operations[i].type !== "COINBASE_REWARD" ||
+                tempOperations[i].extra.spent ||
+                tempOperations[i].type !== "COINBASE_REWARD" ||
                 accountHeight.isGreaterThanOrEqualTo(
-                  new BigNumber(operations[i].blockHeight!)
+                  new BigNumber(tempOperations[i].blockHeight!)
                     .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                     .minus(1)
                 )
               ) {
                 spendableBalanceChange = spendableBalanceChange.minus(
-                  operations[i].value
+                  tempOperations[i].value
                 );
               }
             }
-            checkedOperations[operations[i].id].hash = operations[i].hash;
-            checkedOperations[operations[i].id].type = operations[i].type;
-            checkedOperations[operations[i].id].fee = operations[i].fee;
-            checkedOperations[operations[i].id].date = operations[i].date;
-            checkedOperations[operations[i].id].senders = operations[i].senders;
-            checkedOperations[operations[i].id].recipients =
-              operations[i].recipients;
-            checkedOperations[operations[i].id].extra.spent =
-              operations[i].extra.spent;
-            checkedOperations[operations[i].id].extra.kernelExcess =
-              operations[i].extra.kernelExcess;
-            checkedOperations[operations[i].id].extra.kernelOffset =
-              operations[i].extra.kernelOffset;
+            checkedOperations[tempOperations[i].id].hash =
+              tempOperations[i].hash;
+            checkedOperations[tempOperations[i].id].type =
+              tempOperations[i].type;
+            checkedOperations[tempOperations[i].id].fee = tempOperations[i].fee;
+            checkedOperations[tempOperations[i].id].date =
+              tempOperations[i].date;
+            checkedOperations[tempOperations[i].id].senders =
+              tempOperations[i].senders;
+            checkedOperations[tempOperations[i].id].recipients =
+              tempOperations[i].recipients;
+            checkedOperations[tempOperations[i].id].extra.spent =
+              tempOperations[i].extra.spent;
+            checkedOperations[tempOperations[i].id].extra.kernelExcess =
+              tempOperations[i].extra.kernelExcess;
+            checkedOperations[tempOperations[i].id].extra.kernelOffset =
+              tempOperations[i].extra.kernelOffset;
             checkedOperations[
-              operations[i].id
+              tempOperations[i].id
             ].extra.recipientPaymentProofSignature =
-              operations[i].extra.recipientPaymentProofSignature;
-            delete checkedOperations[operations[i].id];
-            operations.splice(i--, 1);
-          } else if (operations[i].blockHeight !== null) {
-            if (startHeight.isLessThanOrEqualTo(operations[i].blockHeight!)) {
-              if (operations[i].type !== "OUT") {
-                if (!operations[i].extra.spent) {
+              tempOperations[i].extra.recipientPaymentProofSignature;
+            delete checkedOperations[tempOperations[i].id];
+            tempOperations.splice(i--, 1);
+          } else if (tempOperations[i].blockHeight !== null) {
+            if (
+              startHeight.isLessThanOrEqualTo(tempOperations[i].blockHeight!)
+            ) {
+              if (tempOperations[i].type !== "OUT") {
+                if (!tempOperations[i].extra.spent) {
                   const { height, proof } = await Node.getOutput(
                     cryptocurrency,
-                    operations[i].extra.outputCommitment
+                    tempOperations[i].extra.outputCommitment
                   );
                   let ownsOutput = false;
                   if (height) {
                     try {
                       const rewindNonce = await proofBuilder.getRewindNonce(
-                        operations[i].extra.outputCommitment
+                        tempOperations[i].extra.outputCommitment
                       );
                       const bulletproof = await Common.resolveIfPromise(
                         Secp256k1Zkp.rewindBulletproof(
                           proof,
-                          operations[i].extra.outputCommitment,
+                          tempOperations[i].extra.outputCommitment,
                           rewindNonce
                         )
                       );
@@ -374,19 +397,19 @@ export default class Sync {
                         const { identifier, switchType } =
                           ProofBuilder.decodeMessage(message);
                         if (
-                          amount.isEqualTo(operations[i].value) &&
+                          amount.isEqualTo(tempOperations[i].value) &&
                           identifier
                             .serialize()
                             .equals(
-                              operations[i].extra.identifier.serialize()
+                              tempOperations[i].extra.identifier.serialize()
                             ) &&
-                          switchType === operations[i].extra.switchType
+                          switchType === tempOperations[i].extra.switchType
                         ) {
                           if (
                             await Common.resolveIfPromise(
                               Secp256k1Zkp.verifyBulletproof(
                                 proof,
-                                operations[i].extra.outputCommitment,
+                                tempOperations[i].extra.outputCommitment,
                                 Buffer.alloc(0)
                               )
                             )
@@ -405,51 +428,53 @@ export default class Sync {
                       height!
                     );
                     if (
-                      operations[i].type === "COINBASE_REWARD" &&
+                      tempOperations[i].type === "COINBASE_REWARD" &&
                       accountHeight.isGreaterThanOrEqualTo(
-                        new BigNumber(operations[i].blockHeight!)
+                        new BigNumber(tempOperations[i].blockHeight!)
                           .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                           .minus(1)
                       )
                     ) {
                       spendableBalanceChange = spendableBalanceChange.minus(
-                        operations[i].value
+                        tempOperations[i].value
                       );
                     }
-                    operations[i].blockHeight = height!.toNumber();
-                    operations[i].blockHash = hash.toString("hex");
+                    tempOperations[i].blockHeight = height!.toNumber();
+                    tempOperations[i].blockHash = hash.toString("hex");
                     if (
-                      operations[i].type === "COINBASE_REWARD" &&
+                      tempOperations[i].type === "COINBASE_REWARD" &&
                       tipHeight.isGreaterThanOrEqualTo(
-                        new BigNumber(operations[i].blockHeight!)
+                        new BigNumber(tempOperations[i].blockHeight!)
                           .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                           .minus(1)
                       )
                     ) {
                       spendableBalanceChange = spendableBalanceChange.plus(
-                        operations[i].value
+                        tempOperations[i].value
                       );
                     }
                   } else {
-                    balanceChange = balanceChange.minus(operations[i].value);
+                    balanceChange = balanceChange.minus(
+                      tempOperations[i].value
+                    );
                     if (
-                      operations[i].type !== "COINBASE_REWARD" ||
+                      tempOperations[i].type !== "COINBASE_REWARD" ||
                       accountHeight.isGreaterThanOrEqualTo(
-                        new BigNumber(operations[i].blockHeight!)
+                        new BigNumber(tempOperations[i].blockHeight!)
                           .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                           .minus(1)
                       )
                     ) {
                       spendableBalanceChange = spendableBalanceChange.minus(
-                        operations[i].value
+                        tempOperations[i].value
                       );
                     }
-                    if (operations[i].extra.kernelExcess) {
+                    if (tempOperations[i].extra.kernelExcess) {
                       const { height } = await Node.getKernel(
                         cryptocurrency,
-                        operations[i].extra.kernelExcess,
+                        tempOperations[i].extra.kernelExcess,
                         BigNumber.maximum(
-                          new BigNumber(operations[i].blockHeight!).minus(
+                          new BigNumber(tempOperations[i].blockHeight!).minus(
                             Sync.getKernelHeightVariationThreshold(
                               cryptocurrency
                             )
@@ -457,7 +482,7 @@ export default class Sync {
                           0
                         ),
                         BigNumber.minimum(
-                          new BigNumber(operations[i].blockHeight!).plus(
+                          new BigNumber(tempOperations[i].blockHeight!).plus(
                             Sync.getKernelHeightVariationThreshold(
                               cryptocurrency
                             )
@@ -470,30 +495,30 @@ export default class Sync {
                           cryptocurrency,
                           height
                         );
-                        operations[i].extra.spent = true;
-                        operations[i].blockHeight = height.toNumber();
-                        operations[i].blockHash = hash.toString("hex");
+                        tempOperations[i].extra.spent = true;
+                        tempOperations[i].blockHeight = height.toNumber();
+                        tempOperations[i].blockHash = hash.toString("hex");
                       } else {
-                        operations[i].blockHeight = null;
-                        operations[i].blockHash = null;
+                        tempOperations[i].blockHeight = null;
+                        tempOperations[i].blockHash = null;
                       }
                     } else {
-                      operations[i].blockHeight = null;
-                      operations[i].blockHash = null;
+                      tempOperations[i].blockHeight = null;
+                      tempOperations[i].blockHash = null;
                     }
                   }
-                } else if (operations[i].extra.kernelExcess) {
+                } else if (tempOperations[i].extra.kernelExcess) {
                   const { height } = await Node.getKernel(
                     cryptocurrency,
-                    operations[i].extra.kernelExcess,
+                    tempOperations[i].extra.kernelExcess,
                     BigNumber.maximum(
-                      new BigNumber(operations[i].blockHeight!).minus(
+                      new BigNumber(tempOperations[i].blockHeight!).minus(
                         Sync.getKernelHeightVariationThreshold(cryptocurrency)
                       ),
                       0
                     ),
                     BigNumber.minimum(
-                      new BigNumber(operations[i].blockHeight!).plus(
+                      new BigNumber(tempOperations[i].blockHeight!).plus(
                         Sync.getKernelHeightVariationThreshold(cryptocurrency)
                       ),
                       tipHeight
@@ -504,25 +529,25 @@ export default class Sync {
                       cryptocurrency,
                       height
                     );
-                    operations[i].blockHeight = height.toNumber();
-                    operations[i].blockHash = hash.toString("hex");
+                    tempOperations[i].blockHeight = height.toNumber();
+                    tempOperations[i].blockHash = hash.toString("hex");
                   } else {
-                    operations[i].blockHeight = null;
-                    operations[i].blockHash = null;
+                    tempOperations[i].blockHeight = null;
+                    tempOperations[i].blockHash = null;
                   }
                 }
               } else {
                 const { height } = await Node.getKernel(
                   cryptocurrency,
-                  operations[i].extra.kernelExcess,
+                  tempOperations[i].extra.kernelExcess,
                   BigNumber.maximum(
-                    new BigNumber(operations[i].blockHeight!).minus(
+                    new BigNumber(tempOperations[i].blockHeight!).minus(
                       Sync.getKernelHeightVariationThreshold(cryptocurrency)
                     ),
                     0
                   ),
                   BigNumber.minimum(
-                    new BigNumber(operations[i].blockHeight!).plus(
+                    new BigNumber(tempOperations[i].blockHeight!).plus(
                       Sync.getKernelHeightVariationThreshold(cryptocurrency)
                     ),
                     tipHeight
@@ -530,42 +555,42 @@ export default class Sync {
                 );
                 if (height) {
                   const { hash } = await Node.getHeader(cryptocurrency, height);
-                  operations[i].blockHeight = height.toNumber();
-                  operations[i].blockHash = hash.toString("hex");
+                  tempOperations[i].blockHeight = height.toNumber();
+                  tempOperations[i].blockHash = hash.toString("hex");
                 } else {
-                  operations[i].blockHeight = null;
-                  operations[i].blockHash = null;
+                  tempOperations[i].blockHeight = null;
+                  tempOperations[i].blockHash = null;
                 }
               }
             } else if (
-              !operations[i].extra.spent &&
-              operations[i].type === "COINBASE_REWARD" &&
+              !tempOperations[i].extra.spent &&
+              tempOperations[i].type === "COINBASE_REWARD" &&
               accountHeight.isLessThan(
-                new BigNumber(operations[i].blockHeight!)
+                new BigNumber(tempOperations[i].blockHeight!)
                   .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                   .minus(1)
               ) &&
               tipHeight.isGreaterThanOrEqualTo(
-                new BigNumber(operations[i].blockHeight!)
+                new BigNumber(tempOperations[i].blockHeight!)
                   .plus(Consensus.getCoinbaseMaturity(cryptocurrency))
                   .minus(1)
               )
             ) {
               spendableBalanceChange = spendableBalanceChange.plus(
-                operations[i].value
+                tempOperations[i].value
               );
             }
-          } else if (operations[i].type === "OUT") {
+          } else if (tempOperations[i].type === "OUT") {
             const { height } = await Node.getKernel(
               cryptocurrency,
-              operations[i].extra.kernelExcess,
+              tempOperations[i].extra.kernelExcess,
               startHeight,
               tipHeight
             );
             if (height) {
               const { hash } = await Node.getHeader(cryptocurrency, height);
-              operations[i].blockHeight = height.toNumber();
-              operations[i].blockHash = hash.toString("hex");
+              tempOperations[i].blockHeight = height.toNumber();
+              tempOperations[i].blockHash = hash.toString("hex");
             }
           }
         }
@@ -595,7 +620,7 @@ export default class Sync {
           }
           if (pendingOperation.type === "OUT") {
             let pendingOperationExists = false;
-            for (const operation of operations) {
+            for (const operation of tempOperations) {
               if (pendingOperation.id === operation.id) {
                 pendingOperationExists = true;
                 break;
@@ -640,19 +665,19 @@ export default class Sync {
         });
         for (
           let i: number = newOperations.length - 1;
-          i >= 0 && operations.length;
+          i >= 0 && tempOperations.length;
           --i
         ) {
           while (
-            operations.length &&
-            operations[operations.length - 1].date.valueOf() <=
+            tempOperations.length &&
+            tempOperations[tempOperations.length - 1].date.valueOf() <=
               newOperations[i].date.valueOf()
           ) {
-            newOperations.splice(i + 1, 0, operations.pop()!);
+            newOperations.splice(i + 1, 0, tempOperations.pop()!);
           }
         }
-        while (operations.length) {
-          newOperations.splice(0, 0, operations.pop()!);
+        while (tempOperations.length) {
+          newOperations.splice(0, 0, tempOperations.pop()!);
         }
         const newRecentHeights: RecentHeight[] = [
           new RecentHeight(tipHeight, tipHash),
@@ -676,24 +701,24 @@ export default class Sync {
             ),
             0
           );
-          if (recentHeights.length) {
-            for (let j = 0; j < recentHeights.length; ++j) {
+          if (tempRecentHeights.length) {
+            for (let j = 0; j < tempRecentHeights.length; ++j) {
               const age = tipHeight
-                .minus(recentHeights[j].height)
+                .minus(tempRecentHeights[j].height)
                 .multipliedBy(Consensus.getBlockTimeSeconds(cryptocurrency));
               if (
                 (age.isGreaterThanOrEqualTo(minimumAge) &&
                   age.isLessThanOrEqualTo(maximumAge)) ||
-                (idealHeight.isZero() && recentHeights[j].height.isZero())
+                (idealHeight.isZero() && tempRecentHeights[j].height.isZero())
               ) {
                 newRecentHeights.push(
                   new RecentHeight(
-                    recentHeights[j].height,
-                    recentHeights[j].hash
+                    tempRecentHeights[j].height,
+                    tempRecentHeights[j].hash
                   )
                 );
                 break;
-              } else if (j === recentHeights.length - 1) {
+              } else if (j === tempRecentHeights.length - 1) {
                 const { hash } = await Node.getHeader(
                   cryptocurrency,
                   idealHeight
@@ -733,7 +758,7 @@ export default class Sync {
     }
     return {
       newOperations: operations,
-      newRecentHeights: recentHeights,
+      newRecentHeights: tempRecentHeights,
       newAccountHeight: BigNumber.maximum(tipHeight, accountHeight),
       newNextIdentifier: nextIdentifier,
       balanceChange,
@@ -754,7 +779,7 @@ export default class Sync {
   }
 
   private static getOutputsGroupSize(): number {
-    return Common.isLowMemoryDevice() ? 250 : 2000;
+    return Common.isLowMemoryDevice() ? 250 : 1000;
   }
 
   private static getMinimumAgeForRecentHeight(

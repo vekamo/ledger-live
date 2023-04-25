@@ -153,15 +153,15 @@ const accountHash = (a: AccountLike) =>
     a.starred ? "-*" : ""
   }-${a.balance.toString()}-swapHistory(${a.swapHistory.length})${
     a.type === "Account"
-      ? `-freshAddressPath${
+      ? `-freshAddressPath(${
           a.freshAddresses.length
             ? a.freshAddresses[0].derivationPath
             : a.freshAddressPath
-        }`
+        })`
       : ""
   }${
     a.type === "Account"
-      ? `-spendableBalance${a.spendableBalance.toString()}`
+      ? `-spendableBalance(${a.spendableBalance.toString()})`
       : ""
   }`;
 

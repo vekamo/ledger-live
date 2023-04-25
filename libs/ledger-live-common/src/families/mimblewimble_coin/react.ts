@@ -111,6 +111,7 @@ export const addSentTransactionToAccount = (
 ): Account => {
   const { changeOperation, inputsSpent, freshAddress, nextIdentifier } =
     JSON.parse(signedOperation.signature);
+  let newSpendableBalance: BigNumber = new BigNumber(account.spendableBalance);
   for (
     let i = 0, j = 0;
     i < account.operations.length && j < inputsSpent.length;
@@ -118,10 +119,9 @@ export const addSentTransactionToAccount = (
   ) {
     if (inputsSpent.indexOf(account.operations[i].id) !== -1) {
       if (!account.operations[i].extra.spent) {
-        account.spendableBalance = account.spendableBalance.minus(
+        newSpendableBalance = newSpendableBalance.minus(
           account.operations[i].value
         );
-        account.operations[i].extra.spent = true;
       }
       ++j;
     }
@@ -130,9 +130,28 @@ export const addSentTransactionToAccount = (
     return addPendingOperation(
       {
         ...account,
+        spendableBalance: newSpendableBalance,
         freshAddresses: [freshAddress],
         freshAddress: freshAddress.address,
         freshAddressPath: freshAddress.derivationPath,
+        operations: account.operations.map(
+          (operation: Operation): Operation => {
+            if (
+              inputsSpent.indexOf(operation.id) !== -1 &&
+              !operation.extra.spent
+            ) {
+              return {
+                ...operation,
+                extra: {
+                  ...operation.extra,
+                  spent: true,
+                },
+              };
+            } else {
+              return operation;
+            }
+          }
+        ),
         mimbleWimbleCoinResources: {
           ...(account as MimbleWimbleCoinAccount).mimbleWimbleCoinResources,
           nextIdentifier: new Identifier(Buffer.from(nextIdentifier, "hex")),
