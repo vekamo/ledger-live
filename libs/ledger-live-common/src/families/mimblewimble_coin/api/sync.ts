@@ -39,9 +39,7 @@ export default class Sync {
     let spendableBalanceChange: BigNumber = new BigNumber(0);
     const tempRecentHeights: RecentHeight[] = recentHeights.map(
       (recentHeight: RecentHeight): RecentHeight => {
-        return {
-          ...recentHeight,
-        };
+        return new RecentHeight(recentHeight.height, recentHeight.hash);
       }
     );
     const { tipHeight, tipHash } = await Node.getTip(cryptocurrency);
