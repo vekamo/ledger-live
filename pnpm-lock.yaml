@@ -6,6 +6,9 @@ overrides:
   remove-flow-types-loader>loader-utils: '*'
 
 patchedDependencies:
+  axios@0.26.1:
+    hash: egvmob3nk2xud7rk3ac52n3aji
+    path: patches/axios@0.26.1.patch
   react-native-aes-crypto@2.1.1:
     hash: lozwnsft4qikf7edvar55jcfiy
     path: patches/react-native-aes-crypto@2.1.1.patch
@@ -25,7 +28,7 @@ patchedDependencies:
     hash: n5yzdsrxz654upecs5xliebtmm
     path: patches/rn-fetch-blob@0.12.0.patch
   socks-proxy-agent@7.0.0:
-    hash: mlxc4275ty6ofqodfanljuvob4
+    hash: eclfcbpyp6a5jmoq2uv2qk7fim
     path: patches/socks-proxy-agent@7.0.0.patch
 
 importers:
@@ -2093,7 +2096,7 @@ importers:
         version: 3.2.3
       axios:
         specifier: 0.26.1
-        version: 0.26.1
+        version: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
       axios-retry:
         specifier: ^3.2.4
         version: 3.2.5
@@ -2282,7 +2285,7 @@ importers:
         version: 2.1.4
       socks-proxy-agent:
         specifier: 7.0.0
-        version: 7.0.0(patch_hash=mlxc4275ty6ofqodfanljuvob4)
+        version: 7.0.0(patch_hash=eclfcbpyp6a5jmoq2uv2qk7fim)
       source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -2943,7 +2946,7 @@ importers:
         version: 18.15.3
       axios:
         specifier: ^0.26.1
-        version: 0.26.1
+        version: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
       documentation:
         specifier: 13.2.4
         version: 13.2.4
@@ -3072,7 +3075,7 @@ importers:
         version: 18.15.3
       axios:
         specifier: ^0.26.1
-        version: 0.26.1
+        version: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
       documentation:
         specifier: 13.2.4
         version: 13.2.4
@@ -3302,7 +3305,7 @@ importers:
         version: link:../logs
       axios:
         specifier: ^0.26.1
-        version: 0.26.1
+        version: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
       ws:
         specifier: ^7.5.2
         version: 7.5.7
@@ -3618,7 +3621,7 @@ importers:
         version: link:../logs
       axios:
         specifier: ^0.26.1
-        version: 0.26.1
+        version: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
     devDependencies:
       '@types/jest':
         specifier: ^29.5.0
@@ -21820,7 +21823,7 @@ packages:
     resolution: {integrity: sha512-eHzd0HSL3qX6bOOSaQClm+0XmpbSNcJP69uzaBJwfXo7ntQR1bUfGLn6+1Hgsk/lJ0JxakD2PDA4aaeajHvyPw==}
     engines: {node: '>=6.0.0'}
     dependencies:
-      axios: 0.26.1
+      axios: 0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji)
     dev: false
 
   /@taquito/ledger-signer@13.0.1:
@@ -25934,10 +25937,11 @@ packages:
     dependencies:
       follow-redirects: 1.15.0
 
-  /axios@0.26.1:
+  /axios@0.26.1(patch_hash=egvmob3nk2xud7rk3ac52n3aji):
     resolution: {integrity: sha512-fPwcX4EvnSHuInCMItEhAGnaSEXRBjtzh9fOtsE6E1G6p7vl7edEeZe11QHf18+6+9gR5PbKV/sGKNaD8YaMeA==}
     dependencies:
       follow-redirects: 1.15.0
+    patched: true
 
   /axios@0.27.2:
     resolution: {integrity: sha512-t+yRIyySRTp/wua5xEr+z1q60QmLq8ABsS5O9Me1AsE5dfKqgnCFzwiCZZ/cGNd1lq4/7akDWMxdhVlucjmnOQ==}
@@ -36482,7 +36486,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: fsevents 1 will break on node v14+ and could be using insecure binaries. Upgrade to fsevents 2.
+    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
     requiresBuild: true
     dependencies:
       bindings: 1.5.0
@@ -53667,7 +53671,7 @@ packages:
       - supports-color
     dev: true
 
-  /socks-proxy-agent@7.0.0(patch_hash=mlxc4275ty6ofqodfanljuvob4):
+  /socks-proxy-agent@7.0.0(patch_hash=eclfcbpyp6a5jmoq2uv2qk7fim):
     resolution: {integrity: sha512-Fgl0YPZ902wEsAyiQ+idGd1A7rSFx/ayC1CQVMw5P+EQx2V0SgpGtf6OKFhVjPflPUl9YMmEOnmfjCdMUsygww==}
     engines: {node: '>= 10'}
     dependencies:

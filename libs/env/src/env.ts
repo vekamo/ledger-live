@@ -632,7 +632,7 @@ const envDefinitions: Record<
   },
   TOR_SOCKS_PROXY: {
     parser: stringParser,
-    def: "socks://localhost:9050",
+    def: "http://localhost:9050",
     desc: "SOCKS proxy for Tor",
   },
   USER_ID: {

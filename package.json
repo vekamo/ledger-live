@@ -126,7 +126,8 @@
       "react-native-image-crop-tools@1.6.4": "patches/react-native-image-crop-tools@1.6.4.patch",
       "socks-proxy-agent@7.0.0": "patches/socks-proxy-agent@7.0.0.patch",
       "react-native-aes-crypto@2.1.1": "patches/react-native-aes-crypto@2.1.1.patch",
-      "react-native-webview@11.26.1": "patches/react-native-webview@11.26.1.patch"
+      "react-native-webview@11.26.1": "patches/react-native-webview@11.26.1.patch",
+      "axios@0.26.1": "patches/axios@0.26.1.patch"
     }
   }
 }

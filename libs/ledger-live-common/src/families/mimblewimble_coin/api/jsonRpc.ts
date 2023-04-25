@@ -1,4 +1,5 @@
 import axios from "axios";
+import httpAdapter from "axios/lib/adapters/http";
 import JSONBigNumber from "json-bignumber";
 import { SocksProxyAgent } from "socks-proxy-agent";
 import http from "http";
@@ -38,6 +39,7 @@ export default class JsonRpc {
       platformSettings = {
         httpAgent: useTor ? torAgent : new http.Agent(),
         httpsAgent: useTor ? torAgent : new https.Agent(),
+        adapter: httpAdapter,
       };
     }
     try {
