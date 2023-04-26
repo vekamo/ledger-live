@@ -645,7 +645,9 @@ const OperationD: React.ComponentType<Props> = (props: Props) => {
             type={type}
             account={account as Account}
           />
-          {opDetailsExtraIncludesLineBreak ? null : <B />}
+          {OpDetailsExtra !== OperationDetailsExtra && !opDetailsExtraIncludesLineBreak ? (
+            <B />
+          ) : null}
         </>
       )}
     </Box>
@@ -670,8 +672,10 @@ type OperationDetailsExtraProps = {
   account: AccountLike | undefined | null;
 };
 const OperationDetailsExtra = ({ extra }: OperationDetailsExtraProps) => {
+  let operationDetailShown = false;
   const jsx = Object.entries(extra).map(([key, value]) => {
     if (typeof value === "object" || typeof value === "function") return null;
+    operationDetailShown = true;
     return (
       <OpDetailsSection key={key}>
         <OpDetailsTitle>
@@ -683,7 +687,12 @@ const OperationDetailsExtra = ({ extra }: OperationDetailsExtraProps) => {
       </OpDetailsSection>
     );
   });
-  return <>{jsx}</>;
+  return (
+    <>
+      {jsx}
+      {operationDetailShown ? <B /> : null}
+    </>
+  );
 };
 const More = styled(Text).attrs(p => ({
   ff: p.ff ? p.ff : "Inter|Bold",
