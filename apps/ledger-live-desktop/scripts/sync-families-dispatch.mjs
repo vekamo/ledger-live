@@ -24,6 +24,7 @@ const targets = [
   "TokenList.tsx",
   "AccountHeaderManageActions.ts",
   "StepReceiveFunds.tsx",
+  "StepReceiveFundsPostAlert.tsx",
   "NoAssociatedAccounts.tsx",
   "ReceiveStepConnectDevice.tsx",
   "StepImport.tsx",
