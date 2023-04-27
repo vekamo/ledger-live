@@ -5447,7 +5447,6 @@
     "enterResponse": "Enter response",
     "enterTransaction": "Enter transaction",
     "receiveFunds": "Receive Funds",
-    "confirmReceive": "Please confirm the operation on your {{productName}} to receive it",
     "shareResponse": "Share response"
   },
   "near": {

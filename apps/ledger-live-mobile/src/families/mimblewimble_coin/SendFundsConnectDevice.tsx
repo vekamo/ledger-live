@@ -242,6 +242,7 @@ export default function ConnectDevice(props: Props) {
       initialTransaction.current !== navigationTransaction &&
       navigationTransaction
     ) {
+      initialTransaction.current = navigationTransaction;
       setTransaction(navigationTransaction);
       onChangeTransactionResponse(
         (navigationTransaction as MimbleWimbleCoinTransaction)

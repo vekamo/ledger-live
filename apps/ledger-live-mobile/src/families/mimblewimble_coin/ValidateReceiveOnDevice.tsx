@@ -101,10 +101,7 @@ export default function ValidateReceiveOnDevice({
             />
           </AnimationContainer>
           <TitleText>
-            {t(
-              "mimblewimble_coin.confirmReceive",
-              getDeviceModel(device.modelId),
-            )}
+            {t("ValidateOnDevice.title.send", getDeviceModel(device.modelId))}
           </TitleText>
           <DataRowsContainer>
             <AmountField
