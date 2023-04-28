@@ -165,9 +165,28 @@ export const addSentTransactionToAccount = (
   } else {
     return {
       ...account,
+      spendableBalance: newSpendableBalance,
       freshAddresses: [freshAddress],
       freshAddress: freshAddress.address,
       freshAddressPath: freshAddress.derivationPath,
+      operations: account.operations.map(
+        (operation: Operation): Operation => {
+          if (
+            inputsSpent.indexOf(operation.id) !== -1 &&
+            !operation.extra.spent
+          ) {
+            return {
+              ...operation,
+              extra: {
+                ...operation.extra,
+                spent: true,
+              },
+            };
+          } else {
+            return operation;
+          }
+        }
+      ),
       mimbleWimbleCoinResources: {
         ...(account as MimbleWimbleCoinAccount).mimbleWimbleCoinResources,
         nextIdentifier: new Identifier(Buffer.from(nextIdentifier, "hex")),
