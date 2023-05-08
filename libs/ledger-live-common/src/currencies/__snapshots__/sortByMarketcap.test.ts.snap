@@ -99,6 +99,7 @@ Array [
   "ethereum/erc20/iexec_rlc",
   "tomo",
   "elastos",
+  "epic_cash",
   "polygon/erc20/bandtoken",
   "ethereum/erc20/ocean",
   "ethereum/erc20/healthcare_administration_token",

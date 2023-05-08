@@ -65,6 +65,8 @@ setSupportedCurrencies([
   "mimblewimble_coin_floonet",
   "grin",
   "grin_testnet",
+  "epic_cash",
+  "epic_cash_floonet",
   "near",
 ]);
 

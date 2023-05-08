@@ -48,6 +48,11 @@ export default class Consensus {
         return new BigNumber(`1E${cryptocurrency.units[0].magnitude.toFixed()}`)
           .dividedToIntegerBy(100)
           .dividedToIntegerBy(20);
+      case "epic_cash":
+      case "epic_cash_floonet":
+        return new BigNumber(
+          `1E${cryptocurrency.units[0].magnitude.toFixed()}`
+        ).dividedToIntegerBy(1000);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -59,6 +64,8 @@ export default class Consensus {
       case "mimblewimble_coin_floonet":
       case "grin":
       case "grin_testnet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return Consensus.getBlockHeightDay(cryptocurrency);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -71,6 +78,8 @@ export default class Consensus {
       case "mimblewimble_coin_floonet":
       case "grin":
       case "grin_testnet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return 21;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -82,6 +91,8 @@ export default class Consensus {
       case "mimblewimble_coin_floonet":
       case "grin":
       case "grin_testnet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return 3;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -94,6 +105,8 @@ export default class Consensus {
       case "mimblewimble_coin_floonet":
       case "grin":
       case "grin_testnet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return 1;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -106,6 +119,8 @@ export default class Consensus {
       case "mimblewimble_coin_floonet":
       case "grin":
       case "grin_testnet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return 40000;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -151,6 +166,15 @@ export default class Consensus {
         } else {
           return 5;
         }
+      case "epic_cash":
+      case "epic_cash_floonet":
+        if (
+          height.isLessThan(Consensus.getFirstHardForkHeight(cryptocurrency))
+        ) {
+          return 6;
+        } else {
+          return 7;
+        }
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -165,6 +189,8 @@ export default class Consensus {
         return true;
       case "mimblewimble_coin":
       case "grin":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return false;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -191,6 +217,8 @@ export default class Consensus {
     switch (cryptocurrency.id) {
       case "mimblewimble_coin":
       case "mimblewimble_coin_floonet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return 4;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
@@ -201,6 +229,8 @@ export default class Consensus {
     switch (cryptocurrency.id) {
       case "mimblewimble_coin":
       case "mimblewimble_coin_floonet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         return Number.POSITIVE_INFINITY;
       case "grin":
       case "grin_testnet":
@@ -220,6 +250,10 @@ export default class Consensus {
         return "Grin";
       case "grin_testnet":
         return "Grin testnet";
+      case "epic_cash":
+        return "Epic Cash";
+      case "epic_cash_floonet":
+        return "Epic Cash floonet";
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -237,6 +271,10 @@ export default class Consensus {
         return new BigNumber(1687446);
       case "grin_testnet":
         return new BigNumber(1195819);
+      case "epic_cash":
+        return new BigNumber(1943415);
+      case "epic_cash_floonet":
+        return new BigNumber(0);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -281,6 +319,10 @@ export default class Consensus {
     switch (cryptocurrency.id) {
       case "grin_testnet":
         return new BigNumber(185040);
+      case "epic_cash":
+        return new BigNumber(2600000);
+      case "epic_cash_floonet":
+        return new BigNumber(25800);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }

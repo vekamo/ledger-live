@@ -41,6 +41,8 @@ export const minAppVersion = {
   Elrond: "1.0.6",
   EnergyWebChain: "1.4.0",
   Eos: "1.3.1",
+  "Epic Cash": "7.1.0",
+  "Epic Cash Floonet": "7.1.0",
   "Eth Recovery": "0.0.0",
   "Eth Ropsten": "1.6.0",
   "Eth Goerli": "1.9.11",

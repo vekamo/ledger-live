@@ -148,18 +148,49 @@ export default class Slate {
             ttl_cutoff_height: this.timeToLiveCutOffHeight
               ? this.timeToLiveCutOffHeight.toFixed()
               : null,
-            payment_proof: this.hasPaymentProof()
-              ? {
-                  receiver_address: this.recipientPaymentProofAddress,
-                  receiver_signature: this.recipientPaymentProofSignature
-                    ? this.recipientPaymentProofSignature.toString("hex")
-                    : null,
-                  sender_address: this.senderPaymentProofAddress,
-                }
-              : null,
-            coin_type: Slate.getCoinType(this.cryptocurrency),
-            network_type: Slate.getNetworkType(this.cryptocurrency),
           };
+          switch (this.cryptocurrency.id) {
+            case "mimblewimble_coin":
+            case "mimblewimble_coin_floonet":
+              serializedSlate = {
+                ...serializedSlate,
+                payment_proof: this.hasPaymentProof()
+                  ? {
+                      receiver_address: this.recipientPaymentProofAddress,
+                      receiver_signature: this.recipientPaymentProofSignature
+                        ? this.recipientPaymentProofSignature.toString("hex")
+                        : null,
+                      sender_address: this.senderPaymentProofAddress,
+                    }
+                  : null,
+                coin_type: Slate.getCoinType(this.cryptocurrency),
+                network_type: Slate.getNetworkType(this.cryptocurrency),
+              };
+              break;
+            case "epic_cash":
+            case "epic_cash_floonet":
+              serializedSlate = {
+                ...serializedSlate,
+                payment_proof: this.hasPaymentProof()
+                  ? {
+                      receiver_address: Tor.torAddressToPublicKey(
+                        this.recipientPaymentProofAddress as string
+                      ).toString("hex"),
+                      receiver_signature: this.recipientPaymentProofSignature
+                        ? this.recipientPaymentProofSignature.toString("hex")
+                        : null,
+                      sender_address: Tor.torAddressToPublicKey(
+                        this.senderPaymentProofAddress as string
+                      ).toString("hex"),
+                    }
+                  : null,
+              };
+              break;
+            default:
+              throw new MimbleWimbleCoinInvalidParameters(
+                "Invalid cryptocurrency"
+              );
+          }
         }
         return serializedSlate;
       }
@@ -822,6 +853,9 @@ export default class Slate {
       case "grin":
       case "grin_testnet":
         return (this.version as BigNumber).isGreaterThanOrEqualTo(4);
+      case "epic_cash":
+      case "epic_cash_floonet":
+        return false;
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -951,6 +985,8 @@ export default class Slate {
     switch (cryptocurrency.id) {
       case "mimblewimble_coin":
       case "mimblewimble_coin_floonet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         bodyWeight = BigNumber.maximum(
           new BigNumber(numberOfOutputs)
             .multipliedBy(Consensus.getBodyWeightOutputFactor(cryptocurrency))
@@ -1244,26 +1280,69 @@ export default class Slate {
           if (serializedSlate.payment_proof !== null) {
             if (
               !("receiver_address" in serializedSlate.payment_proof) ||
-              typeof serializedSlate.payment_proof.receiver_address !==
-                "string" ||
-              serializedSlate.payment_proof.receiver_address.length !==
-                Tor.ADDRESS_LENGTH
+              typeof serializedSlate.payment_proof.receiver_address !== "string"
             ) {
               throw new MimbleWimbleCoinInvalidParameters(
                 "Invalid serialized slate payment proof"
               );
             }
-            try {
-              Tor.torAddressToPublicKey(
-                serializedSlate.payment_proof.receiver_address
-              );
-            } catch (error: any) {
-              throw new MimbleWimbleCoinInvalidParameters(
-                "Invalid serialized slate payment proof"
-              );
+            switch (slate.cryptocurrency.id) {
+              case "mimblewimble_coin":
+              case "mimblewimble_coin_floonet":
+                if (
+                  serializedSlate.payment_proof.receiver_address.length !==
+                  Tor.ADDRESS_LENGTH
+                ) {
+                  throw new MimbleWimbleCoinInvalidParameters(
+                    "Invalid serialized slate payment proof"
+                  );
+                }
+                try {
+                  Tor.torAddressToPublicKey(
+                    serializedSlate.payment_proof.receiver_address
+                  );
+                } catch (error: any) {
+                  throw new MimbleWimbleCoinInvalidParameters(
+                    "Invalid serialized slate payment proof"
+                  );
+                }
+                slate.recipientPaymentProofAddress =
+                  serializedSlate.payment_proof.receiver_address;
+                break;
+              case "epic_cash":
+              case "epic_cash_floonet":
+                if (
+                  !Common.isHexString(
+                    serializedSlate.payment_proof.receiver_address
+                  ) ||
+                  Buffer.from(
+                    serializedSlate.payment_proof.receiver_address,
+                    "hex"
+                  ).length !== Crypto.ED25519_PUBLIC_KEY_LENGTH
+                ) {
+                  throw new MimbleWimbleCoinInvalidParameters(
+                    "Invalid serialized slate payment proof"
+                  );
+                }
+                try {
+                  slate.recipientPaymentProofAddress =
+                    Tor.publicKeyToTorAddress(
+                      Buffer.from(
+                        serializedSlate.payment_proof.receiver_address,
+                        "hex"
+                      )
+                    );
+                } catch (error: any) {
+                  throw new MimbleWimbleCoinInvalidParameters(
+                    "Invalid serialized slate payment proof"
+                  );
+                }
+                break;
+              default:
+                throw new MimbleWimbleCoinInvalidParameters(
+                  "Invalid cryptocurrency"
+                );
             }
-            slate.recipientPaymentProofAddress =
-              serializedSlate.payment_proof.receiver_address;
             if (
               !("receiver_signature" in serializedSlate.payment_proof) ||
               (serializedSlate.payment_proof.receiver_signature !== null &&
@@ -1294,23 +1373,62 @@ export default class Slate {
                 "Invalid serialized slate payment proof"
               );
             }
-            switch (serializedSlate.payment_proof.sender_address.length) {
-              case Mqs.ADDRESS_LENGTH:
-                try {
-                  await Mqs.mqsAddressToPublicKey(
+            switch (slate.cryptocurrency.id) {
+              case "mimblewimble_coin":
+              case "mimblewimble_coin_floonet":
+                switch (serializedSlate.payment_proof.sender_address.length) {
+                  case Mqs.ADDRESS_LENGTH:
+                    try {
+                      await Mqs.mqsAddressToPublicKey(
+                        serializedSlate.payment_proof.sender_address,
+                        slate.cryptocurrency
+                      );
+                    } catch (error: any) {
+                      throw new MimbleWimbleCoinInvalidParameters(
+                        "Invalid serialized slate payment proof"
+                      );
+                    }
+                    break;
+                  case Tor.ADDRESS_LENGTH:
+                    try {
+                      Tor.torAddressToPublicKey(
+                        serializedSlate.payment_proof.sender_address
+                      );
+                    } catch (error: any) {
+                      throw new MimbleWimbleCoinInvalidParameters(
+                        "Invalid serialized slate payment proof"
+                      );
+                    }
+                    break;
+                  default:
+                    throw new MimbleWimbleCoinInvalidParameters(
+                      "Invalid serialized slate payment proof"
+                    );
+                }
+                slate.senderPaymentProofAddress =
+                  serializedSlate.payment_proof.sender_address;
+                break;
+              case "epic_cash":
+              case "epic_cash_floonet":
+                if (
+                  !Common.isHexString(
+                    serializedSlate.payment_proof.sender_address
+                  ) ||
+                  Buffer.from(
                     serializedSlate.payment_proof.sender_address,
-                    slate.cryptocurrency
-                  );
-                } catch (error: any) {
+                    "hex"
+                  ).length !== Crypto.ED25519_PUBLIC_KEY_LENGTH
+                ) {
                   throw new MimbleWimbleCoinInvalidParameters(
                     "Invalid serialized slate payment proof"
                   );
                 }
-                break;
-              case Tor.ADDRESS_LENGTH:
                 try {
-                  Tor.torAddressToPublicKey(
-                    serializedSlate.payment_proof.sender_address
+                  slate.senderPaymentProofAddress = Tor.publicKeyToTorAddress(
+                    Buffer.from(
+                      serializedSlate.payment_proof.sender_address,
+                      "hex"
+                    )
                   );
                 } catch (error: any) {
                   throw new MimbleWimbleCoinInvalidParameters(
@@ -1320,11 +1438,9 @@ export default class Slate {
                 break;
               default:
                 throw new MimbleWimbleCoinInvalidParameters(
-                  "Invalid serialized slate payment proof"
+                  "Invalid cryptocurrency"
                 );
             }
-            slate.senderPaymentProofAddress =
-              serializedSlate.payment_proof.sender_address;
           } else {
             slate.recipientPaymentProofAddress = null;
             slate.recipientPaymentProofSignature = null;
@@ -2328,6 +2444,18 @@ export default class Slate {
       case "grin":
       case "grin_testnet":
         return new BigNumber(4);
+      case "epic_cash":
+      case "epic_cash_floonet":
+        if (this.timeToLiveCutOffHeight || this.hasPaymentProof()) {
+          return new BigNumber(3);
+        }
+        if (
+          recipientSupportedVersions &&
+          recipientSupportedVersions.indexOf("V2") === -1
+        ) {
+          return new BigNumber(3);
+        }
+        return new BigNumber(2);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -2356,6 +2484,30 @@ export default class Slate {
             this.senderPaymentProofAddress as string,
             this.cryptocurrency
           );
+        const buffer = Buffer.alloc(
+          Uint64Array.BYTES_PER_ELEMENT +
+            Crypto.COMMITMENT_LENGTH +
+            Crypto.ED25519_PUBLIC_KEY_LENGTH
+        );
+        Uint64Array.writeBigEndian(buffer, this.amount, 0);
+        excess.copy(buffer, Uint64Array.BYTES_PER_ELEMENT);
+        senderPaymentProofPublicKey.copy(
+          buffer,
+          Uint64Array.BYTES_PER_ELEMENT + Crypto.COMMITMENT_LENGTH
+        );
+        return buffer;
+      }
+      case "epic_cash":
+      case "epic_cash_floonet": {
+        if (
+          this.amount.isLessThan(0) ||
+          this.amount.isGreaterThan("0xFFFFFFFFFFFFFFFF")
+        ) {
+          throw new MimbleWimbleCoinInvalidParameters("Invalid amount");
+        }
+        const senderPaymentProofPublicKey = Tor.torAddressToPublicKey(
+          this.senderPaymentProofAddress as string
+        );
         const buffer = Buffer.alloc(
           Uint64Array.BYTES_PER_ELEMENT +
             Crypto.COMMITMENT_LENGTH +
@@ -2652,6 +2804,8 @@ export default class Slate {
       switch (this.cryptocurrency.id) {
         case "mimblewimble_coin":
         case "mimblewimble_coin_floonet":
+        case "epic_cash":
+        case "epic_cash_floonet":
           try {
             recipientPaymentProofPublicKey = Tor.torAddressToPublicKey(
               this.recipientPaymentProofAddress as string
@@ -2744,6 +2898,9 @@ export default class Slate {
       case "grin":
       case "grin_testnet":
         return ["4"];
+      case "epic_cash":
+      case "epic_cash_floonet":
+        return ["2", "3"];
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
@@ -2800,6 +2957,22 @@ export default class Slate {
           serializedSlate.length >= Uint16Array.BYTES_PER_ELEMENT
         ) {
           return serializedSlate.readUInt16BE(0).toFixed();
+        }
+        break;
+      case "epic_cash":
+      case "epic_cash_floonet":
+        if (!Common.isPureObject(serializedSlate)) {
+          return null;
+        }
+        if (
+          "version_info" in serializedSlate &&
+          Common.isPureObject(serializedSlate.version_info) &&
+          "version" in serializedSlate.version_info &&
+          Common.isBigNumber(serializedSlate.version_info.version) &&
+          serializedSlate.version_info.version.isInteger() &&
+          serializedSlate.version_info.version.isPositive()
+        ) {
+          return serializedSlate.version_info.version.toFixed();
         }
         break;
     }

@@ -64,6 +64,10 @@ export default class Mqs {
         return Buffer.from([1, 69]);
       case "mimblewimble_coin_floonet":
         return Buffer.from([1, 121]);
+      case "epic_cash":
+        return Buffer.from([1, 0]);
+      case "epic_cash_floonet":
+        return Buffer.from([1, 136]);
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }

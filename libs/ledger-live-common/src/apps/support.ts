@@ -37,6 +37,8 @@ const appVersionsRequired = {
   "MimbleWimble Coin Floonet": ">= 6.0.1",
   Grin: ">= 6.0.1",
   "Grin Testnet": ">= 6.0.1",
+  "Epic Cash": ">= 7.1.0",
+  "Epic Cash Floonet": ">= 7.1.0",
   NEAR: ">= 1.2.1",
 };
 export function mustUpgrade(appName: string, appVersion: string): boolean {

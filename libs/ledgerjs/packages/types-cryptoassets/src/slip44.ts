@@ -105,4 +105,6 @@ export enum CoinType {
   MIMBLEWIMBLE_COIN_FLOONET = 1,
   GRIN = 592,
   GRIN_TESTNET = 1,
+  EPIC_CASH = 23000,
+  EPIC_CASH_FLOONET = 1,
 }

@@ -70,6 +70,8 @@ const abandonSeedAddresses: Partial<Record<CryptoCurrency["id"], string>> = {
   grin: "grin1pe6nvyy4n2nqh73l8kr80zqj5uf4cyqdu4jelqhxmmmjufw8g33q42r76l",
   grin_testnet:
     "tgrin1txasfcykjh7vk47tadwy24x2wqhexkjk3e93nx7kuah8q87arlqsa3cnlw",
+  epic_cash: "qmxrfhcqx5jr5e7a3u6wo54ncw4krpvmt6r56npwgzlyzmlbwbzu7oad",
+  epic_cash_floonet: "3xxq4hh3x5cgtqlgljvvevmvss24ylezhbsq4q5hu6wrkf23xtoupvid",
   near: "4e7de0a21d8a20f970c86b6edf407906d7ba9e205979c3268270eef80a286e2d",
 };
 

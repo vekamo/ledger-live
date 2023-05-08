@@ -134,6 +134,8 @@ export default async (
   switch (account.currency.id) {
     case "mimblewimble_coin":
     case "mimblewimble_coin_floonet":
+    case "epic_cash":
+    case "epic_cash_floonet":
       try {
         Tor.torAddressToPublicKey(recipient);
         usePaymentProof = true;

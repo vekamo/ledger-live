@@ -40,7 +40,7 @@ export default class MimbleWimbleCoin {
     CONTINUE_TRANSACTION_GET_PUBLIC_NONCE: 0x12,
     CONTINUE_TRANSACTION_GET_MESSAGE_SIGNATURE: 0x13,
     FINISH_TRANSACTION: 0x14,
-    GET_MQS_TIMESTAMP_SIGNATURE: 0x15,
+    GET_MQS_CHALLENGE_SIGNATURE: 0x15,
   };
   private static readonly Status = {
     UNKNOWN_CLASS: 0xb100,
@@ -129,6 +129,8 @@ export default class MimbleWimbleCoin {
     switch (this.cryptocurrency.id) {
       case "mimblewimble_coin":
       case "mimblewimble_coin_floonet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         addressType = MimbleWimbleCoin.AddressType.TOR;
         break;
       case "grin":
@@ -608,6 +610,8 @@ export default class MimbleWimbleCoin {
     switch (this.cryptocurrency.id) {
       case "mimblewimble_coin":
       case "mimblewimble_coin_floonet":
+      case "epic_cash":
+      case "epic_cash_floonet":
         addressType = MimbleWimbleCoin.AddressType.TOR;
         break;
       case "grin":

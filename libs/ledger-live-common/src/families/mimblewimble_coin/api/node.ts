@@ -220,6 +220,10 @@ export default class Node {
         return getEnv("API_GRIN_NODE");
       case "grin_testnet":
         return getEnv("API_GRIN_TESTNET_NODE");
+      case "epic_cash":
+        return getEnv("API_EPIC_CASH_NODE");
+      case "epic_cash_floonet":
+        return getEnv("API_EPIC_CASH_FLOONET_NODE");
       default:
         throw new MimbleWimbleCoinInvalidParameters("Invalid cryptocurrency");
     }
