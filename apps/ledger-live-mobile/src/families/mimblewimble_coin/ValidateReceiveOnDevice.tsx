@@ -82,6 +82,7 @@ export default function ValidateReceiveOnDevice({
 }) {
   const { dark } = useTheme();
   const { t } = useTranslation();
+  const mainAccount = getMainAccount(account, parentAccount);
   return (
     <RootContainer>
       <ScrollContainer
@@ -104,6 +105,10 @@ export default function ValidateReceiveOnDevice({
             {t("ValidateOnDevice.title.send", getDeviceModel(device.modelId))}
           </TitleText>
           <DataRowsContainer>
+            <TextField
+              label={"Account Index"}
+              value={mainAccount.index.toFixed()}
+            />
             <AmountField
               account={account}
               parentAccount={parentAccount}

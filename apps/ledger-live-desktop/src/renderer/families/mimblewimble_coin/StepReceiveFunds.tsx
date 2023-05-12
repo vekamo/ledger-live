@@ -179,6 +179,9 @@ const ApproveReceivingTransaction = ({
         <Trans i18nKey="TransactionConfirm.title" />
       </Info>
       <Box style={{ width: "100%" }} px={30} mb={20}>
+        <TransactionConfirmField label={"Account Index"}>
+          <FieldText>{account.index.toFixed()}</FieldText>
+        </TransactionConfirmField>
         <TransactionConfirmField label={"Amount"}>
           <FormattedVal
             color={"palette.text.shade80"}

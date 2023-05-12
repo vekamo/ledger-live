@@ -33,12 +33,12 @@ const appVersionsRequired = {
   Celo: ">= 1.1.8",
   "Cardano ADA": ">= 4.1.0",
   Zcash: "> 2.0.6",
-  "MimbleWimble Coin": ">= 6.0.1",
-  "MimbleWimble Coin Floonet": ">= 6.0.1",
-  Grin: ">= 6.0.1",
-  "Grin Testnet": ">= 6.0.1",
-  "Epic Cash": ">= 7.1.0",
-  "Epic Cash Floonet": ">= 7.1.0",
+  "MimbleWimble Coin": ">= 7.2.0",
+  "MimbleWimble Coin Floonet": ">= 7.2.0",
+  Grin: ">= 7.2.0",
+  "Grin Testnet": ">= 7.2.0",
+  "Epic Cash": ">= 7.2.0",
+  "Epic Cash Floonet": ">= 7.2.0",
   NEAR: ">= 1.2.1",
 };
 export function mustUpgrade(appName: string, appVersion: string): boolean {
