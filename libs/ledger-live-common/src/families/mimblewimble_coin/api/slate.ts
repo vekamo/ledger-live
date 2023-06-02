@@ -2024,7 +2024,7 @@ export default class Slate {
           if (
             !("ver" in serializedSlate) ||
             typeof serializedSlate.ver !== "string" ||
-            !/^\d+:\d+$/u.test(serializedSlate.ver) ||
+            !/^(?:0|[1-9]\d*):(?:0|[1-9]\d*)$/u.test(serializedSlate.ver) ||
             new BigNumber(serializedSlate.ver.split(":")[1]).isGreaterThan(
               Number.MAX_SAFE_INTEGER
             )
@@ -2948,7 +2948,7 @@ export default class Slate {
           Common.isPureObject(serializedSlate) &&
           "ver" in serializedSlate &&
           typeof serializedSlate.ver === "string" &&
-          /^\d+:\d+$/u.test(serializedSlate.ver)
+          /^(?:0|[1-9]\d*):(?:0|[1-9]\d*)$/u.test(serializedSlate.ver)
         ) {
           return serializedSlate.ver.split(":")[0];
         }

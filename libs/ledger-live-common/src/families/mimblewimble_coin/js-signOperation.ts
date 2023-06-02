@@ -660,6 +660,11 @@ export default ({
               "Altered slate response from recipient"
             );
           }
+          if (slateResponse.outputs.length <= slate.outputs.length) {
+            throw new MimbleWimbleCoinUnsupportedResponseFromRecipient(
+              "Invalid slate response outputs"
+            );
+          }
           if (
             !slateResponse.numberOfParticipants.isEqualTo(
               slateResponse.participants.length
@@ -669,9 +674,28 @@ export default ({
               "Invalid slate response participants"
             );
           }
-          if (slateResponse.outputs.length <= slate.outputs.length) {
+          if (
+            !slateResponse.getParticipant(SlateParticipant.SENDER_ID.plus(1))
+          ) {
             throw new MimbleWimbleCoinUnsupportedResponseFromRecipient(
-              "Invalid slate response outputs"
+              "Invalid slate response participants"
+            );
+          }
+          if (
+            !slateResponse
+              .getParticipant(SlateParticipant.SENDER_ID.plus(1))!
+              .isComplete()
+          ) {
+            throw new MimbleWimbleCoinUnsupportedResponseFromRecipient(
+              "Invalid slate response participants"
+            );
+          }
+          if (
+            slateResponse.hasPaymentProof() &&
+            !slateResponse.recipientPaymentProofSignature
+          ) {
+            throw new MimbleWimbleCoinUnsupportedResponseFromRecipient(
+              "Invalid slate response payment proof"
             );
           }
           if (slate.isCompact()) {
